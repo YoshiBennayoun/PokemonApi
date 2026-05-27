@@ -1,0 +1,24 @@
+GET http://localhost:3000/
+### Add a new pokemon
+
+POST http://localhost:3000/pokemons
+Content-Type: application/json
+
+{
+    "name": "Pikachu",
+    "type": "Electric",
+    "level": 25
+}
+
+### 
+PUT http://localhost:3000/pokemons/1
+Content-Type: application/json
+
+{
+    "name": "Pikachu",
+    "type": "Electric",
+    "level": 250
+}
+
+###
+DELETE  http://localhost:3000/pokemons/13

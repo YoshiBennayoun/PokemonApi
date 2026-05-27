@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    hello world
+    <form action="">
+      <input type="text" name="name" id="name" />
+      <button type="submit">envoyer</button>
+    </form>
+    <script>
+      document.querySelector("form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        let input = e.currentTarget.children[0];
+        console.log(e.currentTarget);
+
+        let div = document.createElement("div");
+        fetch("http://localhost:3000/pokemons", {
+          method: "POST",
+
+          headers: {
+            accept: "application/json",
+          },
+          body: input.value,
+        })
+          .then((res) => res.json())
+          .then((response) => {
+            div.innerText = JSON.stringify(response, null, 2);
+          });
+        // div.innerHTML = input.value;
+        document.body.prepend(div);
+      });
+    </script>
+  </body>
+</html>
