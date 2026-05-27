@@ -1,5 +1,6 @@
 require("dotenv/config");
 const express = require("express");
+const { Sequelize } = require("sequelize");
 let pokemons = require("./data.js");
 const morgan = require("morgan");
 const favicon = require("serve-favicon");
@@ -8,13 +9,40 @@ const app = express();
 const port = process.env.PORT;
 app.use(express.json());
 app.use(morgan("dev"));
-// app.use(express.static("public"));
+app.use(express.static("public"));
 app.use(favicon(__dirname + "/public/favicon.svg"));
-app.get("/", (req, res) => {
+// db configuration
+
+const sequelize = new Sequelize("pokedex", "root", "", {
+  host: "localhost",
+  dialect: "mariadb",
+  dialectOptions: {
+    timezone: "Etc/GMT-2",
+  },
+  logging: false,
+});
+
+sequelize
+  .authenticate()
+  .then((_) =>
+    console.log(
+      "\x1b[42m\nLa Connexion à la base de donnéez a bien été établie.\x1b[0m",
+    ),
+  )
+  .catch((error) =>
+    console.error(
+      "\x1b[41m\nImpossible de se connecter à la base de donées\x1b[0m",
+      error,
+    ),
+  );
+
+app.get("/pokemons", (req, res) => {
   res.send({ message: "voici la liste complète des pokémons", data: pokemons });
 });
+
 app.get("/pokemons/:id", (req, res) => {
   const id = parseInt(req.params.id);
+
   const pokemon = pokemons.find((pokemon) => pokemon.id == id);
   res.send({ message: `voici le pokémon ${pokemon.name}`, data: pokemon });
 });
