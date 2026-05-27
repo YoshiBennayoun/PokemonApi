@@ -1,24 +1,27 @@
 require("dotenv/config");
 const express = require("express");
-const { Sequelize } = require("sequelize");
+const { Sequelize, DataTypes } = require("sequelize");
+const pokemonModel = require("./src/models/pokemon");
 let pokemons = require("./data.js");
 const morgan = require("morgan");
 const favicon = require("serve-favicon");
 
 const app = express();
 const port = process.env.PORT;
+const dbname = process.env.DB_NAME;
+const dbuser = process.env.DB_USER;
+const dbpassword = process.env.DB_PASSWORD;
+const dbhost = process.env.DB_HOST;
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(express.static("public"));
 app.use(favicon(__dirname + "/public/favicon.svg"));
 // db configuration
 
-const sequelize = new Sequelize("pokedex", "root", "", {
-  host: "localhost",
+const sequelize = new Sequelize(dbname, dbuser, dbpassword, {
+  host: dbhost,
   dialect: "mariadb",
-  dialectOptions: {
-    timezone: "Etc/GMT-2",
-  },
+  timezone: "+02:00",
   logging: false,
 });
 
@@ -35,6 +38,24 @@ sequelize
       error,
     ),
   );
+
+// création du modèle sequelize
+const Pokemon = pokemonModel(sequelize, DataTypes);
+
+sequelize.sync({ force: true }).then(() => {
+  console.log("La base de données a été synchronisée.");
+  pokemons.map((pokemon) => {
+    Pokemon.create({
+      name: pokemon.name,
+      hp: pokemon.hp,
+      cp: pokemon.cp,
+      picture: pokemon.picture,
+      types: pokemon.types.join(),
+    }).then((pokemon) => {
+      console.log(pokemon.toJSON());
+    });
+  });
+});
 
 app.get("/pokemons", (req, res) => {
   res.send({ message: "voici la liste complète des pokémons", data: pokemons });
