@@ -1,24 +1,28 @@
 GET http://localhost:3000/
 ### Add a new pokemon
 
-POST http://localhost:3000/pokemons
+POST http://localhost:3000/api/pokemons
 Content-Type: application/json
 
 {
-    "name": "Pikachu",
-    "type": "Electric",
-    "level": 25
+    "name": "Roucool",
+    "hp": 30,
+    "cp": 7,
+    "picture": "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/016.png",
+    "types": [
+        "Normal",
+        "Vol"
+    ]
 }
-
 ### 
-PUT http://localhost:3000/pokemons/1
+PUT http://localhost:3000/api/pokemons/13
 Content-Type: application/json
 
 {
     "name": "Pikachu",
-    "type": "Electric",
+    "types": ["Electric","Fairy"],
     "level": 250
 }
 
 ###
-DELETE  http://localhost:3000/pokemons/13
+DELETE  http://localhost:3000/api/pokemons/12

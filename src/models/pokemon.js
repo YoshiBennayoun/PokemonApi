@@ -61,6 +61,16 @@ module.exports = (sequelize, DataTypes) => {
       types: {
         type: DataTypes.STRING,
         allowNull: false,
+        get() {
+          return this.getDataValue("types").split(",");
+        },
+        set(types) {
+          if (Array.isArray(types)) {
+            this.setDataValue("types", types.join(","));
+          } else {
+            this.setDataValue("types", types);
+          }
+        },
       },
     },
     {

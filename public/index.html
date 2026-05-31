@@ -1,38 +1,556 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Pokédex - Gestion CRUD</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        color: white;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .form-container {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .form-container h2 {
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+        font-weight: 600;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      input[type="url"] {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+
+      .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-secondary {
+        background: #6c757d;
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: #5a6268;
+      }
+
+      .btn-danger {
+        background: #dc3545;
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background: #c82333;
+      }
+
+      .btn-warning {
+        background: #ffc107;
+        color: #333;
+      }
+
+      .btn-warning:hover {
+        background: #e0a800;
+      }
+
+      .pokemon-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+      }
+
+      .pokemon-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition:
+          transform 0.3s,
+          box-shadow 0.3s;
+      }
+
+      .pokemon-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .pokemon-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        background: #f0f0f0;
+      }
+
+      .pokemon-name {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .pokemon-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .stat {
+        background: #f8f9fa;
+        padding: 8px;
+        border-radius: 5px;
+        text-align: center;
+      }
+
+      .stat-label {
+        font-size: 0.8rem;
+        color: #666;
+      }
+
+      .stat-value {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #333;
+      }
+
+      .pokemon-types {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-bottom: 15px;
+      }
+
+      .type-badge {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+
+      .pokemon-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .pokemon-actions button {
+        flex: 1;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 25px;
+        border-radius: 10px;
+        color: white;
+        font-weight: 600;
+        z-index: 1000;
+        animation: slideIn 0.3s ease-out;
+      }
+
+      .notification.success {
+        background: #28a745;
+      }
+
+      .notification.error {
+        background: #dc3545;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(400px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .loading {
+        text-align: center;
+        color: white;
+        font-size: 1.5rem;
+        margin: 50px 0;
+      }
+    </style>
   </head>
   <body>
-    hello world
-    <form action="">
-      <input type="text" name="name" id="name" />
-      <button type="submit">envoyer</button>
-    </form>
+    <div class="container">
+      <h1>🎮 Pokédex - Gestion CRUD</h1>
+
+      <!-- Formulaire d'ajout/modification -->
+      <div class="form-container">
+        <h2 id="formTitle">Ajouter un Pokémon</h2>
+        <form id="pokemonForm">
+          <input type="hidden" id="pokemonId" />
+
+          <div class="form-group">
+            <label for="name">Nom du Pokémon *</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              placeholder="Ex: Pikachu"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="hp">Points de Vie (HP) *</label>
+            <input
+              type="number"
+              id="hp"
+              name="hp"
+              required
+              placeholder="Ex: 100"
+              min="1"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="cp">Points de Combat (CP) *</label>
+            <input
+              type="number"
+              id="cp"
+              name="cp"
+              required
+              placeholder="Ex: 50"
+              min="1"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="picture">URL de l'image *</label>
+            <input
+              type="url"
+              id="picture"
+              name="picture"
+              required
+              placeholder="https://..."
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="types">Types (séparés par des virgules) *</label>
+            <input
+              type="text"
+              id="types"
+              name="types"
+              required
+              placeholder="Ex: Feu,Vol"
+            />
+          </div>
+
+          <div class="pokemon-actions">
+            <button type="submit" class="btn btn-primary" id="submitBtn">
+              Ajouter
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary hidden"
+              id="cancelBtn"
+            >
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Liste des Pokémon -->
+      <div id="pokemonList" class="pokemon-list"></div>
+      <div id="loading" class="loading">Chargement des Pokémon...</div>
+    </div>
+
     <script>
-      document.querySelector("form").addEventListener("submit", (e) => {
-        e.preventDefault();
-        let input = e.currentTarget.children[0];
-        console.log(e.currentTarget);
+            const API_URL = "http://localhost:3000/api/pokemons";
+            let isEditing = false;
 
-        let div = document.createElement("div");
-        fetch("http://localhost:3000/pokemons", {
-          method: "POST",
+            // Charger les Pokémon au démarrage
+            document.addEventListener("DOMContentLoaded", loadPokemons);
 
-          headers: {
-            accept: "application/json",
-          },
-          body: input.value,
-        })
-          .then((res) => res.json())
-          .then((response) => {
-            div.innerText = JSON.stringify(response, null, 2);
-          });
-        // div.innerHTML = input.value;
-        document.body.prepend(div);
-      });
+            // Gestion du formulaire
+            document
+              .getElementById("pokemonForm")
+              .addEventListener("submit", handleSubmit);
+            document.getElementById("cancelBtn").addEventListener("click", resetForm);
+
+            // Charger tous les Pokémon
+            async function loadPokemons() {
+              try {
+                const response = await fetch(API_URL);
+                const result = await response.json();
+                displayPokemons(result.data);
+              } catch (error) {
+                showNotification("Erreur lors du chargement des Pokémon", "error");
+                console.error(error);
+              }
+            }
+
+            // Afficher les Pokémon
+            function displayPokemons(pokemons) {
+              const listContainer = document.getElementById("pokemonList");
+              const loading = document.getElementById("loading");
+
+              loading.classList.add("hidden");
+              listContainer.innerHTML = "";
+
+              if (pokemons.length === 0) {
+                listContainer.innerHTML =
+                  '<p style="color: white; text-align: center; grid-column: 1/-1;">Aucun Pokémon trouvé</p>';
+                return;
+              }
+
+              pokemons.forEach((pokemon) => {
+                const card = createPokemonCard(pokemon);
+                listContainer.appendChild(card);
+              });
+            }
+
+            // Créer une carte Pokémon
+            function createPokemonCard(pokemon) {
+              const card = document.createElement("div");
+              card.className = "pokemon-card";
+
+              const typesArray = Array.isArray(pokemon.types)
+                ? pokemon.types
+                : pokemon.types.split(",");
+
+              card.innerHTML = `
+              <img src="${pokemon.picture}" alt="${pokemon.name}" class="pokemon-image" onerror="this.src='https://via.placeholder.com/300x200?text=Image+non+disponible'" />
+              <h3 class="pokemon-name">${pokemon.name}</h3>
+              <div class="pokemon-stats">
+                <div class="stat">
+                  <div class="stat-label">HP</div>
+                  <div class="stat-value">${pokemon.hp}</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-label">CP</div>
+                  <div class="stat-value">${pokemon.cp}</div>
+                </div>
+              </div>
+              <div class="pokemon-types">
+                ${typesArray.map((type) => `<span class="type-badge">${type.trim()}</span>`).join("")}
+              </div>
+              <div class="pokemon-actions">
+                <button class="btn btn-warning" onclick="editPokemon(${pokemon.id})">Modifier</button>
+                <button class="btn btn-danger" onclick="deletePokemon(${pokemon.id})">Supprimer</button>
+              </div>
+            `;
+
+              return card;
+            }
+
+            // Gérer la soumission du formulaire
+            async function handleSubmit(e) {
+              e.preventDefault();
+
+              const pokemonData = {
+                name: document.getElementById("name").value,
+                hp: parseInt(document.getElementById("hp").value),
+                cp: parseInt(document.getElementById("cp").value),
+                picture: document.getElementById("picture").value,
+                types: document.getElementById("types").value,
+              };
+
+              try {
+                if (isEditing) {
+                  const pokemonId = document.getElementById("pokemonId").value;
+                  await updatePokemon(pokemonId, pokemonData);
+                } else {
+                  await createPokemon(pokemonData);
+                }
+                resetForm();
+                loadPokemons();
+              } catch (error) {
+                showNotification("Erreur lors de l'opération", "error");
+                console.error(error);
+              }
+            }
+
+            // Créer un Pokémon
+            async function createPokemon(data) {
+              const response = await fetch(API_URL, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              });
+
+              if (response.ok) {
+                showNotification("Pokémon ajouté avec succès!", "success");
+              } else {
+                throw new Error("Erreur lors de la création");
+              }
+            }
+
+            // Modifier un Pokémon
+            async function updatePokemon(id, data) {
+              const response = await fetch(`${API_URL}/${id}`, {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              });
+
+              if (response.ok) {
+                showNotification("Pokémon modifié avec succès!", "success");
+              } else {
+                throw new Error("Erreur lors de la modification");
+              }
+            }
+
+            // Supprimer un Pokémon
+            async function deletePokemon(id) {
+              if (!confirm("Êtes-vous sûr de vouloir supprimer ce Pokémon?")) {
+                return;
+              }
+
+              try {
+                const response = await fetch(`${API_URL}/${id}`, {
+                  method: "DELETE",
+                });
+
+                if (response.ok) {
+                  showNotification("Pokémon supprimé avec succès!", "success");
+                  loadPokemons();
+                } else {
+                  throw new Error("Erreur lors de la suppression");
+                }
+              } catch (error) {
+                showNotification("Erreur lors de la suppression", "error");
+                console.error(error);
+              }
+            }
+
+            // Préparer le formulaire pour l'édition
+            async function editPokemon(id) {
+              try {
+                const response = await fetch(`${API_URL}/${id}`);
+                const result = await response.json();
+                const pokemon = result.data;
+
+                document.getElementById("pokemonId").value = pokemon.id;
+                document.getElementById("name").value = pokemon.name;
+                document.getElementById("hp").value = pokemon.hp;
+                document.getElementById("cp").value = pokemon.cp;
+                document.getElementById("picture").value = pokemon.picture;
+                document.getElementById("types").value = Array.isArray(pokemon.types)
+                  ? pokemon.types.join(",")
+                  : pokemon.types;
+
+                isEditing = true;
+                document.getElementById("formTitle").textContent =
+                  "Modifier le Pokémon";
+                document.getElementById("submitBtn").textContent = "Modifier";
+                document.getElementById("cancelBtn").classList.remove("hidden");
+
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              } catch (error) {
+                showNotification("Erreur lors du chargement du Pokémon", "error");
+                console.error(error);
+              }
+            }
+
+            // Réinitialiser le formulaire
+            function resetForm() {
+              document.getElementById("pokemonForm").reset();
+              document.getElementById("pokemonId").value = "";
+              isEditing = false;
+              document.getElementById("formTitle").textContent = "Ajouter un Pokémon";
+              document.getElementById("submitBtn").textContent = "Ajouter";
+              document.getElementById("cancelBtn").classList.add("hidden");
+            }
+
+            // Afficher une notification
+            function showNotification(message, type) {
+              const notification = document.createElement("div");
+              notification.className = `notification ${type}`;
+              notification.textContent = message;
+              document.body.appendChild(notification);
+
+              setTimeout(() => {
+                notification.remove();
+              }, 3000);
+            }
+            // Audio DB API API Example
+   
     </script>
   </body>
 </html>
