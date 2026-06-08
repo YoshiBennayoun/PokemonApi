@@ -1,19 +1,78 @@
-GET http://localhost:3000/
+GET http://localhost:3000/api/pokemons
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc4MDkzNzE0MCwiZXhwIjoxNzgxMDIzNTQwfQ.e__DrLmsUflLEkX7MaXC1ZltsarHeGjErQq6eB2sJMw
+
+
+###
+GET http://localhost:3000/api/pokemons?name=a&limit=2
+###
+GET http://localhost:3000/api/pokemons?limit=5
 ### Add a new pokemon
 
 POST http://localhost:3000/api/pokemons
+
 Content-Type: application/json
 
 {
-    "name": "Roucool",
+    "name": "Pikachu",
     "hp": 30,
-    "cp": 7,
+    "cp": 22,
     "picture": "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/016.png",
     "types": [
         "Normal",
         "Vol"
     ]
 }
+
+
+###
+POST http://localhost:3000/api/pokemons
+Content-Type: application/json
+
+{
+    "name": null,
+    "hp": null,
+    "cp": null,
+    "picture": null,
+    "types": [null]
+}
+
+###
+POST http://localhost:3000/api/pokemons
+Content-Type: application/json
+
+{
+    "name": "Bulbizarre",
+    "hp": "tres fort",
+    "cp": 49,
+    "picture": "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/001.png",
+    "types": ["Plante", "Poison"]
+}
+
+###
+POST http://localhost:3000/api/login
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "admin"
+}
+###
+POST http://localhost:3000/api/login
+Content-Type: application/json
+
+{
+    "username": "orssi",
+    "password": "admin"
+}
+###
+POST http://localhost:3000/api/login
+Content-Type: application/json
+
+{
+    "username": "",
+    "password": ""
+}
+###
 ### 
 PUT http://localhost:3000/api/pokemons/13
 Content-Type: application/json
@@ -21,7 +80,7 @@ Content-Type: application/json
 {
     "name": "Pikachu",
     "types": ["Electric","Fairy"],
-    "level": 250
+    "hp": "testerror",
 }
 
 ###

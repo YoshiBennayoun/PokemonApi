@@ -11,3 +11,11 @@
  */
 
 export default Pokemons;
+
+/**
+ * @typedef User
+ * @property {number} id
+ * @property {string} username
+ * @property {string} password
+ * @property {Date} created
+ */

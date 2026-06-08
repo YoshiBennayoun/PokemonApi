@@ -337,60 +337,60 @@
     </div>
 
     <script>
-            const API_URL = "http://localhost:3000/api/pokemons";
-            let isEditing = false;
+      const API_URL = "http://localhost:3000/api/pokemons";
+      let isEditing = false;
 
-            // Charger les Pokémon au démarrage
-            document.addEventListener("DOMContentLoaded", loadPokemons);
+      // Charger les Pokémon au démarrage
+      document.addEventListener("DOMContentLoaded", loadPokemons);
 
-            // Gestion du formulaire
-            document
-              .getElementById("pokemonForm")
-              .addEventListener("submit", handleSubmit);
-            document.getElementById("cancelBtn").addEventListener("click", resetForm);
+      // Gestion du formulaire
+      document
+        .getElementById("pokemonForm")
+        .addEventListener("submit", handleSubmit);
+      document.getElementById("cancelBtn").addEventListener("click", resetForm);
 
-            // Charger tous les Pokémon
-            async function loadPokemons() {
-              try {
-                const response = await fetch(API_URL);
-                const result = await response.json();
-                displayPokemons(result.data);
-              } catch (error) {
-                showNotification("Erreur lors du chargement des Pokémon", "error");
-                console.error(error);
-              }
-            }
+      // Charger tous les Pokémon
+      async function loadPokemons() {
+        try {
+          const response = await fetch(API_URL);
+          const result = await response.json();
+          displayPokemons(result.data);
+        } catch (error) {
+          showNotification("Erreur lors du chargement des Pokémon", "error");
+          console.error(error);
+        }
+      }
 
-            // Afficher les Pokémon
-            function displayPokemons(pokemons) {
-              const listContainer = document.getElementById("pokemonList");
-              const loading = document.getElementById("loading");
+      // Afficher les Pokémon
+      function displayPokemons(pokemons) {
+        const listContainer = document.getElementById("pokemonList");
+        const loading = document.getElementById("loading");
 
-              loading.classList.add("hidden");
-              listContainer.innerHTML = "";
+        loading.classList.add("hidden");
+        listContainer.innerHTML = "";
 
-              if (pokemons.length === 0) {
-                listContainer.innerHTML =
-                  '<p style="color: white; text-align: center; grid-column: 1/-1;">Aucun Pokémon trouvé</p>';
-                return;
-              }
+        if (pokemons.length === 0) {
+          listContainer.innerHTML =
+            '<p style="color: white; text-align: center; grid-column: 1/-1;">Aucun Pokémon trouvé</p>';
+          return;
+        }
 
-              pokemons.forEach((pokemon) => {
-                const card = createPokemonCard(pokemon);
-                listContainer.appendChild(card);
-              });
-            }
+        pokemons.forEach((pokemon) => {
+          const card = createPokemonCard(pokemon);
+          listContainer.appendChild(card);
+        });
+      }
 
-            // Créer une carte Pokémon
-            function createPokemonCard(pokemon) {
-              const card = document.createElement("div");
-              card.className = "pokemon-card";
+      // Créer une carte Pokémon
+      function createPokemonCard(pokemon) {
+        const card = document.createElement("div");
+        card.className = "pokemon-card";
 
-              const typesArray = Array.isArray(pokemon.types)
-                ? pokemon.types
-                : pokemon.types.split(",");
+        const typesArray = Array.isArray(pokemon.types)
+          ? pokemon.types
+          : pokemon.types.split(",");
 
-              card.innerHTML = `
+        card.innerHTML = `
               <img src="${pokemon.picture}" alt="${pokemon.name}" class="pokemon-image" onerror="this.src='https://via.placeholder.com/300x200?text=Image+non+disponible'" />
               <h3 class="pokemon-name">${pokemon.name}</h3>
               <div class="pokemon-stats">
@@ -412,145 +412,144 @@
               </div>
             `;
 
-              return card;
-            }
+        return card;
+      }
 
-            // Gérer la soumission du formulaire
-            async function handleSubmit(e) {
-              e.preventDefault();
+      // Gérer la soumission du formulaire
+      async function handleSubmit(e) {
+        e.preventDefault();
 
-              const pokemonData = {
-                name: document.getElementById("name").value,
-                hp: parseInt(document.getElementById("hp").value),
-                cp: parseInt(document.getElementById("cp").value),
-                picture: document.getElementById("picture").value,
-                types: document.getElementById("types").value,
-              };
+        const pokemonData = {
+          name: document.getElementById("name").value,
+          hp: parseInt(document.getElementById("hp").value),
+          cp: parseInt(document.getElementById("cp").value),
+          picture: document.getElementById("picture").value,
+          types: document.getElementById("types").value,
+        };
 
-              try {
-                if (isEditing) {
-                  const pokemonId = document.getElementById("pokemonId").value;
-                  await updatePokemon(pokemonId, pokemonData);
-                } else {
-                  await createPokemon(pokemonData);
-                }
-                resetForm();
-                loadPokemons();
-              } catch (error) {
-                showNotification("Erreur lors de l'opération", "error");
-                console.error(error);
-              }
-            }
+        try {
+          if (isEditing) {
+            const pokemonId = document.getElementById("pokemonId").value;
+            await updatePokemon(pokemonId, pokemonData);
+          } else {
+            await createPokemon(pokemonData);
+          }
+          resetForm();
+          loadPokemons();
+        } catch (error) {
+          showNotification("Erreur lors de l'opération", "error");
+          console.error(error);
+        }
+      }
 
-            // Créer un Pokémon
-            async function createPokemon(data) {
-              const response = await fetch(API_URL, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-              });
+      // Créer un Pokémon
+      async function createPokemon(data) {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
 
-              if (response.ok) {
-                showNotification("Pokémon ajouté avec succès!", "success");
-              } else {
-                throw new Error("Erreur lors de la création");
-              }
-            }
+        if (response.ok) {
+          showNotification("Pokémon ajouté avec succès!", "success");
+        } else {
+          throw new Error("Erreur lors de la création", response);
+        }
+      }
 
-            // Modifier un Pokémon
-            async function updatePokemon(id, data) {
-              const response = await fetch(`${API_URL}/${id}`, {
-                method: "PUT",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-              });
+      // Modifier un Pokémon
+      async function updatePokemon(id, data) {
+        const response = await fetch(`${API_URL}/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
 
-              if (response.ok) {
-                showNotification("Pokémon modifié avec succès!", "success");
-              } else {
-                throw new Error("Erreur lors de la modification");
-              }
-            }
+        if (response.ok) {
+          showNotification("Pokémon modifié avec succès!", "success");
+        } else {
+          throw new Error("Erreur lors de la modification");
+        }
+      }
 
-            // Supprimer un Pokémon
-            async function deletePokemon(id) {
-              if (!confirm("Êtes-vous sûr de vouloir supprimer ce Pokémon?")) {
-                return;
-              }
+      // Supprimer un Pokémon
+      async function deletePokemon(id) {
+        if (!confirm("Êtes-vous sûr de vouloir supprimer ce Pokémon?")) {
+          return;
+        }
 
-              try {
-                const response = await fetch(`${API_URL}/${id}`, {
-                  method: "DELETE",
-                });
+        try {
+          const response = await fetch(`${API_URL}/${id}`, {
+            method: "DELETE",
+          });
 
-                if (response.ok) {
-                  showNotification("Pokémon supprimé avec succès!", "success");
-                  loadPokemons();
-                } else {
-                  throw new Error("Erreur lors de la suppression");
-                }
-              } catch (error) {
-                showNotification("Erreur lors de la suppression", "error");
-                console.error(error);
-              }
-            }
+          if (response.ok) {
+            showNotification("Pokémon supprimé avec succès!", "success");
+            loadPokemons();
+          } else {
+            throw new Error("Erreur lors de la suppression");
+          }
+        } catch (error) {
+          showNotification("Erreur lors de la suppression", "error");
+          console.error(error);
+        }
+      }
 
-            // Préparer le formulaire pour l'édition
-            async function editPokemon(id) {
-              try {
-                const response = await fetch(`${API_URL}/${id}`);
-                const result = await response.json();
-                const pokemon = result.data;
+      // Préparer le formulaire pour l'édition
+      async function editPokemon(id) {
+        try {
+          const response = await fetch(`${API_URL}/${id}`);
+          const result = await response.json();
+          const pokemon = result.data;
 
-                document.getElementById("pokemonId").value = pokemon.id;
-                document.getElementById("name").value = pokemon.name;
-                document.getElementById("hp").value = pokemon.hp;
-                document.getElementById("cp").value = pokemon.cp;
-                document.getElementById("picture").value = pokemon.picture;
-                document.getElementById("types").value = Array.isArray(pokemon.types)
-                  ? pokemon.types.join(",")
-                  : pokemon.types;
+          document.getElementById("pokemonId").value = pokemon.id;
+          document.getElementById("name").value = pokemon.name;
+          document.getElementById("hp").value = pokemon.hp;
+          document.getElementById("cp").value = pokemon.cp;
+          document.getElementById("picture").value = pokemon.picture;
+          document.getElementById("types").value = Array.isArray(pokemon.types)
+            ? pokemon.types.join(",")
+            : pokemon.types;
 
-                isEditing = true;
-                document.getElementById("formTitle").textContent =
-                  "Modifier le Pokémon";
-                document.getElementById("submitBtn").textContent = "Modifier";
-                document.getElementById("cancelBtn").classList.remove("hidden");
+          isEditing = true;
+          document.getElementById("formTitle").textContent =
+            "Modifier le Pokémon";
+          document.getElementById("submitBtn").textContent = "Modifier";
+          document.getElementById("cancelBtn").classList.remove("hidden");
 
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              } catch (error) {
-                showNotification("Erreur lors du chargement du Pokémon", "error");
-                console.error(error);
-              }
-            }
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } catch (error) {
+          showNotification("Erreur lors du chargement du Pokémon", "error");
+          console.error(error);
+        }
+      }
 
-            // Réinitialiser le formulaire
-            function resetForm() {
-              document.getElementById("pokemonForm").reset();
-              document.getElementById("pokemonId").value = "";
-              isEditing = false;
-              document.getElementById("formTitle").textContent = "Ajouter un Pokémon";
-              document.getElementById("submitBtn").textContent = "Ajouter";
-              document.getElementById("cancelBtn").classList.add("hidden");
-            }
+      // Réinitialiser le formulaire
+      function resetForm() {
+        document.getElementById("pokemonForm").reset();
+        document.getElementById("pokemonId").value = "";
+        isEditing = false;
+        document.getElementById("formTitle").textContent = "Ajouter un Pokémon";
+        document.getElementById("submitBtn").textContent = "Ajouter";
+        document.getElementById("cancelBtn").classList.add("hidden");
+      }
 
-            // Afficher une notification
-            function showNotification(message, type) {
-              const notification = document.createElement("div");
-              notification.className = `notification ${type}`;
-              notification.textContent = message;
-              document.body.appendChild(notification);
+      // Afficher une notification
+      function showNotification(message, type) {
+        const notification = document.createElement("div");
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
 
-              setTimeout(() => {
-                notification.remove();
-              }, 3000);
-            }
-            // Audio DB API API Example
-   
+        setTimeout(() => {
+          notification.remove();
+        }, 3000);
+      }
+      // Audio DB API API Example
     </script>
   </body>
 </html>

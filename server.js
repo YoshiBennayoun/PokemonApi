@@ -17,13 +17,22 @@ app.use(express.static("public"));
 app.use(favicon(__dirname + "/public/favicon.svg"));
 
 // la base de données
-sequelize.initDb()
+sequelize.initDb();
 
-require('./src/routes/findAllpokemons')(app)
-require('./src/routes/findPokemonByPk')(app)
-require('./src/routes/createPokemon')(app)
-require('./src/routes/updatePokemon')(app)
-require('./src/routes/deletePokemon')(app)
+require("./src/routes/findAllpokemons")(app);
+require("./src/routes/findPokemonByPk")(app);
+require("./src/routes/createPokemon")(app);
+require("./src/routes/updatePokemon")(app);
+require("./src/routes/deletePokemon")(app);
+require("./src/routes/login")(app);
+
+// gestion des erreurs 404
+
+app.use(({ res }) => {
+  const message =
+    "impossible de trouver la ressource demandé vous pouvez essayer une autre URL.";
+    res.status(404).json({message})
+});
 
 app.listen(port, () => {
   console.log(`
