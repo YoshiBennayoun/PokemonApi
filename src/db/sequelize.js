@@ -5,10 +5,10 @@ const UserModel = require("../models/user");
 const pokemons = require("./mock-pokemon");
 const bcrypt = require("bcrypt");
 
-const dbname = process.env.DB_NAME;
-const dbuser = process.env.DB_USER;
-const dbpassword = process.env.DB_PASSWORD;
-const dbhost = process.env.DB_HOST;
+const dbname = process.env.MYSQLDATABASE;
+const dbuser = process.env.MYSQLUSER;
+const dbpassword = process.env.MYSQLPASSWORD;
+const dbhost = process.env.MYSQLHOST;
 
 const sequelize = new Sequelize(dbname, dbuser, dbpassword, {
   host: dbhost,

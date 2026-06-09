@@ -1,11 +1,14 @@
 GET http://localhost:3000/api/pokemons
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc4MDkzNzE0MCwiZXhwIjoxNzgxMDIzNTQwfQ.e__DrLmsUflLEkX7MaXC1ZltsarHeGjErQq6eB2sJMw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc4MDk2NTEyMCwiZXhwIjoxNzgxMDUxNTIwfQ.ibKxNH52SKNaK7azjDA0lC4NotiIhgQBvTu9LV89sL8
+
 
 
 ###
 GET http://localhost:3000/api/pokemons?name=a&limit=2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc4MDkzNzE0MCwiZXhwIjoxNzgxMDIzNTQwfQ.e__DrLmsUflLEkX7MaXC1ZltsarHeGjErQq6eB2sJMw
 ###
 GET http://localhost:3000/api/pokemons?limit=5
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc4MDkzNzE0MCwiZXhwIjoxNzgxMDIzNTQwfQ.e__DrLmsUflLEkX7MaXC1ZltsarHeGjErQq6eB2sJMw
 ### Add a new pokemon
 
 POST http://localhost:3000/api/pokemons
