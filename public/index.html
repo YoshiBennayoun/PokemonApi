@@ -1,555 +1,1613 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pokédex - Gestion CRUD</title>
+    <title>Pokédex API - Documentation Complète</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap");
+
       * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
       }
 
-      body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        padding: 20px;
+      code,
+      pre {
+        font-family: "JetBrains Mono", monospace !important;
       }
 
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
+      .sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
       }
 
-      h1 {
-        color: white;
-        text-align: center;
-        margin-bottom: 30px;
-        font-size: 2.5rem;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      .sidebar::-webkit-scrollbar {
+        width: 6px;
       }
 
-      .form-container {
-        background: white;
-        border-radius: 15px;
-        padding: 30px;
-        margin-bottom: 30px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      .sidebar::-webkit-scrollbar-track {
+        background: transparent;
       }
 
-      .form-container h2 {
-        color: #333;
-        margin-bottom: 20px;
-        font-size: 1.5rem;
+      .sidebar::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 3px;
       }
 
-      .form-group {
-        margin-bottom: 15px;
+      .sidebar::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
       }
 
-      label {
-        display: block;
-        margin-bottom: 5px;
-        color: #555;
-        font-weight: 600;
-      }
-
-      input[type="text"],
-      input[type="number"],
-      input[type="url"] {
-        width: 100%;
-        padding: 12px;
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
-        font-size: 1rem;
-        transition: border-color 0.3s;
-      }
-
-      input:focus {
-        outline: none;
-        border-color: #667eea;
-      }
-
-      .btn {
-        padding: 12px 24px;
-        border: none;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-weight: 600;
+      .nav-item {
+        transition: all 0.2s;
         cursor: pointer;
-        transition: all 0.3s;
+        padding: 0.75rem 1rem;
+        border-left: 3px solid transparent;
+        color: #64748b;
+        display: block;
+        text-decoration: none;
+        border-radius: 0.25rem;
       }
 
-      .btn-primary {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+      .nav-item:hover {
+        background: color-mix(in srgb, var(--p) 10%, transparent);
+        color: inherit;
       }
 
-      .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      .nav-item.active {
+        border-left-color: #3b82f6;
+        background: color-mix(in srgb, var(--p) 15%, transparent);
+        color: var(--p);
+        font-weight: 600;
       }
 
-      .btn-secondary {
-        background: #6c757d;
-        color: white;
+      .endpoint {
+        scroll-margin-top: 80px;
       }
 
-      .btn-secondary:hover {
-        background: #5a6268;
+      .method-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 0.375rem;
+        font-weight: 600;
+        font-size: 0.875rem;
+        margin-right: 0.5rem;
       }
 
-      .btn-danger {
-        background: #dc3545;
-        color: white;
+      .method-get {
+        background-color: #dbeafe;
+        color: #1e40af;
       }
 
-      .btn-danger:hover {
-        background: #c82333;
+      .method-post {
+        background-color: #dcfce7;
+        color: #166534;
       }
 
-      .btn-warning {
-        background: #ffc107;
-        color: #333;
+      .method-put {
+        background-color: #fef3c7;
+        color: #92400e;
       }
 
-      .btn-warning:hover {
-        background: #e0a800;
+      .method-delete {
+        background-color: #fee2e2;
+        color: #991b1b;
       }
 
-      .pokemon-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 20px;
+      html[data-theme="dark"] .method-get {
+        background-color: #1e3a8a;
+        color: #93c5fd;
       }
 
-      .pokemon-card {
-        background: white;
-        border-radius: 15px;
-        padding: 20px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        transition:
-          transform 0.3s,
-          box-shadow 0.3s;
+      html[data-theme="dark"] .method-post {
+        background-color: #064e3b;
+        color: #6ee7b7;
       }
 
-      .pokemon-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      html[data-theme="dark"] .method-put {
+        background-color: #78350f;
+        color: #fbbf24;
       }
 
-      .pokemon-image {
+      html[data-theme="dark"] .method-delete {
+        background-color: #7f1d1d;
+        color: #fca5a5;
+      }
+
+      .code-block {
+        background: #1f2937;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        border: 1px solid #374151;
+      }
+
+      .response-success {
+        border-left: 4px solid #10b981;
+        background: #f0fdf4;
+      }
+
+      .response-error {
+        border-left: 4px solid #ef4444;
+        background: #fef2f2;
+      }
+
+      .response-warning {
+        border-left: 4px solid #f59e0b;
+        background: #fffbeb;
+      }
+
+      html[data-theme="dark"] .response-success {
+        background: #064e3b;
+        border-left-color: #10b981;
+      }
+
+      html[data-theme="dark"] .response-error {
+        background: #7f1d1d;
+        border-left-color: #ef4444;
+      }
+
+      html[data-theme="dark"] .response-warning {
+        background: #78350f;
+        border-left-color: #f59e0b;
+      }
+
+      .parameter-table {
+        border-collapse: collapse;
         width: 100%;
-        height: 200px;
-        object-fit: cover;
-        border-radius: 10px;
-        margin-bottom: 15px;
-        background: #f0f0f0;
       }
 
-      .pokemon-name {
-        font-size: 1.5rem;
-        color: #333;
-        margin-bottom: 10px;
-        font-weight: 700;
-      }
-
-      .pokemon-stats {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-bottom: 15px;
-      }
-
-      .stat {
-        background: #f8f9fa;
-        padding: 8px;
-        border-radius: 5px;
-        text-align: center;
-      }
-
-      .stat-label {
-        font-size: 0.8rem;
-        color: #666;
-      }
-
-      .stat-value {
-        font-size: 1.2rem;
-        font-weight: 700;
-        color: #333;
-      }
-
-      .pokemon-types {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
-        margin-bottom: 15px;
-      }
-
-      .type-badge {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-size: 0.85rem;
+      .parameter-table th {
+        background: #f8fafc;
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 2px solid #e2e8f0;
         font-weight: 600;
+        color: #334155;
       }
 
-      .pokemon-actions {
-        display: flex;
-        gap: 10px;
+      .parameter-table td {
+        padding: 0.75rem;
+        border-bottom: 1px solid #e2e8f0;
       }
 
-      .pokemon-actions button {
-        flex: 1;
+      html[data-theme="dark"] .parameter-table th {
+        background: #1f2937;
+        border-bottom-color: #374151;
+        color: #cbd5e1;
       }
 
-      .hidden {
-        display: none;
+      html[data-theme="dark"] .parameter-table td {
+        border-bottom-color: #374151;
       }
 
-      .notification {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 25px;
-        border-radius: 10px;
-        color: white;
+      .tag-required {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 0.125rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
         font-weight: 600;
-        z-index: 1000;
-        animation: slideIn 0.3s ease-out;
+        margin-left: 0.5rem;
       }
 
-      .notification.success {
-        background: #28a745;
+      .tag-optional {
+        background: #e0e7ff;
+        color: #3730a3;
+        padding: 0.125rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-left: 0.5rem;
       }
 
-      .notification.error {
-        background: #dc3545;
+      html[data-theme="dark"] .tag-required {
+        background: #7f1d1d;
+        color: #fca5a5;
       }
 
-      @keyframes slideIn {
-        from {
-          transform: translateX(400px);
-          opacity: 0;
-        }
-        to {
-          transform: translateX(0);
-          opacity: 1;
-        }
+      html[data-theme="dark"] .tag-optional {
+        background: #3730a3;
+        color: #c7d2fe;
       }
 
-      .loading {
-        text-align: center;
-        color: white;
-        font-size: 1.5rem;
-        margin: 50px 0;
+      .hljs {
+        background: transparent;
+        padding: 0;
+      }
+
+      .section-title {
+        position: relative;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e2e8f0;
+        margin-bottom: 2rem;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 60px;
+        height: 2px;
+        background: linear-gradient(90deg, #3b82f6, #06b6d4);
+      }
+
+      html[data-theme="dark"] .section-title {
+        border-bottom-color: #374151;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <h1>🎮 Pokédex - Gestion CRUD</h1>
+    <div class="drawer drawer-mobile">
+      <!-- Toggle drawer checkbox -->
+      <input id="drawer-toggle" type="checkbox" class="drawer-toggle" />
 
-      <!-- Formulaire d'ajout/modification -->
-      <div class="form-container">
-        <h2 id="formTitle">Ajouter un Pokémon</h2>
-        <form id="pokemonForm">
-          <input type="hidden" id="pokemonId" />
-
-          <div class="form-group">
-            <label for="name">Nom du Pokémon *</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              required
-              placeholder="Ex: Pikachu"
-            />
+      <!-- Main content -->
+      <div class="drawer-content flex flex-col">
+        <!-- Header -->
+        <div
+          class="navbar bg-base-100 border-b border-base-300 sticky top-0 z-40 shadow-sm"
+        >
+          <div class="flex-none md:hidden">
+            <label for="drawer-toggle" class="btn btn-square btn-ghost">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="inline-block w-6 h-6 stroke-current"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                ></path>
+              </svg>
+            </label>
           </div>
-
-          <div class="form-group">
-            <label for="hp">Points de Vie (HP) *</label>
-            <input
-              type="number"
-              id="hp"
-              name="hp"
-              required
-              placeholder="Ex: 100"
-              min="1"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="cp">Points de Combat (CP) *</label>
-            <input
-              type="number"
-              id="cp"
-              name="cp"
-              required
-              placeholder="Ex: 50"
-              min="1"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="picture">URL de l'image *</label>
-            <input
-              type="url"
-              id="picture"
-              name="picture"
-              required
-              placeholder="https://..."
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="types">Types (séparés par des virgules) *</label>
-            <input
-              type="text"
-              id="types"
-              name="types"
-              required
-              placeholder="Ex: Feu,Vol"
-            />
-          </div>
-
-          <div class="pokemon-actions">
-            <button type="submit" class="btn btn-primary" id="submitBtn">
-              Ajouter
-            </button>
-            <button
-              type="button"
-              class="btn btn-secondary hidden"
-              id="cancelBtn"
+          <div class="flex-1">
+            <a
+              class="btn btn-ghost text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-4"
+              >🔴 Pokédex API</a
             >
-              Annuler
-            </button>
           </div>
-        </form>
+          <div class="flex-none gap-4">
+            <div class="form-control hidden sm:block">
+              <input
+                type="text"
+                id="search"
+                placeholder="Rechercher..."
+                class="input input-bordered w-24 md:w-64"
+              />
+            </div>
+
+            <!-- Language Selector -->
+            <div class="dropdown dropdown-end">
+              <button
+                class="btn btn-ghost btn-circle"
+                id="langBtn"
+                title="Language"
+              >
+                <span id="langIcon">🇫🇷</span>
+              </button>
+              <ul
+                class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+              >
+                <li>
+                  <a onclick="setLanguage('fr')" id="lang-fr">🇫🇷 Français</a>
+                </li>
+                <li>
+                  <a onclick="setLanguage('en')" id="lang-en">🇬🇧 English</a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Theme Toggle -->
+            <label
+              class="swap swap-rotate btn btn-ghost btn-circle"
+              id="themeToggle"
+            >
+              <input type="checkbox" class="theme-controller" value="dark" />
+              <svg
+                class="swap-off fill-current w-6 h-6"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M21.64,13a1,1,0,0,0-1.05-.14,8,8,0,0,1-3.52.91,8.07,8.07,0,0,1-8-8,8.3,8.3,0,0,1,.54-2.64,1,1,0,0,0-.3-1.1,1,1,0,0,0-1.12.21,10,10,0,1,0,14.12,14.12,1,1,0,0,0-.1-1.31Z"
+                />
+              </svg>
+              <svg
+                class="swap-on fill-current w-6 h-6"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM16.66,5.34a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41l-.71.71A1,1,0,0,0,16.66,5.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9.35,9.65a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29l.71-.71a1,1,0,1,0-1.41-1.41l-.71.71A1,1,0,0,0,11.66,20.65Zm9.31-9.31a1,1,0,0,0,.29-.7,1,1,0,0,0-.29-.71l-.71-.71a1,1,0,1,0-1.41,1.41l.71.71A1,1,0,0,0,21,11.34ZM12,17.9a5.9,5.9,0,1,1,5.9-5.9A5.9,5.9,0,0,1,12,17.9Zm0-9.8a3.9,3.9,0,1,0,3.9,3.9A3.9,3.9,0,0,0,12,8.1Z"
+                />
+              </svg>
+            </label>
+          </div>
+        </div>
+
+        <!-- Main content area -->
+        <main class="flex-1 container mx-auto max-w-7xl px-4 md:px-8 py-8">
+          <!-- Getting Started -->
+          <section id="intro" class="endpoint mb-16">
+            <div class="section-title">
+              <h1 class="text-4xl font-bold mb-4" data-i18n="title">
+                Pokédex API
+              </h1>
+              <p class="text-lg opacity-75" data-i18n="subtitle">
+                Documentation complète de l'API RESTful Pokédex
+              </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6 mb-8">
+              <div class="card bg-base-100 border border-base-300">
+                <div class="card-body">
+                  <h3 class="card-title text-blue-600" data-i18n="base_url">
+                    📍 Base URL
+                  </h3>
+                  <code class="text-sm bg-base-200 p-2 rounded"
+                    >http://localhost:3000/api</code
+                  >
+                </div>
+              </div>
+              <div class="card bg-base-100 border border-base-300">
+                <div class="card-body">
+                  <h3
+                    class="card-title text-blue-600"
+                    data-i18n="authentication"
+                  >
+                    🔐 Authentification
+                  </h3>
+                  <p class="text-sm">JWT Bearer Token (24h)</p>
+                </div>
+              </div>
+              <div class="card bg-base-100 border border-base-300">
+                <div class="card-body">
+                  <h3 class="card-title text-blue-600" data-i18n="format">
+                    📝 Format
+                  </h3>
+                  <p class="text-sm">JSON</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Authentication -->
+          <section id="auth" class="endpoint mb-16">
+            <div class="section-title">
+              <h2 class="text-3xl font-bold" data-i18n="auth_section">
+                🔐 Authentification
+              </h2>
+            </div>
+            <div class="alert alert-info mb-8">
+              <div>
+                <p>
+                  <strong data-i18n="auth_desc"
+                    >Important : Tous les endpoints (sauf login) nécessitent un
+                    JWT token valide dans l'en-tête Authorization.</strong
+                  >
+                </p>
+              </div>
+            </div>
+
+            <div class="bg-base-100 rounded-lg border border-base-300 p-6">
+              <h3 class="font-semibold mb-4" data-i18n="auth_header">
+                En-tête Authorization
+              </h3>
+              <div class="code-block mb-4">
+                <pre><code class="language-http">Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code></pre>
+              </div>
+              <p class="opacity-75 text-sm" data-i18n="auth_note">
+                Le token est obtenu via l'endpoint de login et est valide
+                pendant 24 heures.
+              </p>
+            </div>
+          </section>
+
+          <!-- Endpoints -->
+          <section id="endpoints" class="endpoint mb-16">
+            <div class="section-title">
+              <h2 class="text-3xl font-bold" data-i18n="endpoints">
+                📚 Endpoints
+              </h2>
+            </div>
+
+            <!-- Login -->
+            <div
+              id="login-endpoint"
+              class="endpoint mb-12 bg-base-100 rounded-lg border border-base-300 p-8"
+            >
+              <div class="flex items-center gap-3 mb-6">
+                <span class="method-badge method-post">POST</span>
+                <code class="text-lg font-semibold">/api/login</code>
+              </div>
+              <p class="opacity-75 mb-6">
+                Authentifie un utilisateur et retourne un JWT token.
+              </p>
+
+              <div class="mb-6">
+                <h4 class="font-semibold mb-3">Paramètres</h4>
+                <table class="parameter-table">
+                  <thead>
+                    <tr>
+                      <th>Nom</th>
+                      <th>Type</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <code>username</code
+                        ><span class="tag-required">Requis</span>
+                      </td>
+                      <td><code>string</code></td>
+                      <td>Nom d'utilisateur</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <code>password</code
+                        ><span class="tag-required">Requis</span>
+                      </td>
+                      <td><code>string</code></td>
+                      <td>Mot de passe</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <h4 class="font-semibold mb-3">Requête</h4>
+                  <div class="code-block">
+                    <pre><code class="language-json">{
+  "username": "pikachu",
+  "password": "123456"
+}</code></pre>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-3">Réponse (200)</h4>
+                  <div class="code-block response-success">
+                    <pre><code class="language-json">{
+  "message": "Connexion réussie",
+  "user": {
+    "id": 1,
+    "username": "pikachu"
+  },
+  "token": "eyJhbGciOiJIUzI1NiIs..."
+}</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 class="font-semibold mb-3">Codes d'erreur</h4>
+                <div class="space-y-3">
+                  <div class="response-error p-4 rounded">
+                    <p><strong>404</strong> - Utilisateur non trouvé</p>
+                  </div>
+                  <div class="response-error p-4 rounded">
+                    <p><strong>401</strong> - Mot de passe incorrect</p>
+                  </div>
+                  <div class="response-error p-4 rounded">
+                    <p><strong>500</strong> - Erreur serveur</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Get All Pokemons -->
+            <div
+              id="get-pokemons-endpoint"
+              class="endpoint mb-12 bg-base-100 rounded-lg border border-base-300 p-8"
+            >
+              <div class="flex items-center gap-3 mb-6">
+                <span class="method-badge method-get">GET</span>
+                <code class="text-lg font-semibold">/api/pokemons</code>
+              </div>
+              <p class="opacity-75 mb-6">
+                Récupère la liste des pokémons avec filtrage optionnel.
+              </p>
+
+              <div class="mb-6">
+                <h4 class="font-semibold mb-3">Paramètres de requête</h4>
+                <table class="parameter-table">
+                  <thead>
+                    <tr>
+                      <th>Nom</th>
+                      <th>Type</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <code>name</code
+                        ><span class="tag-optional">Optionnel</span>
+                      </td>
+                      <td><code>string</code></td>
+                      <td>Filtre par nom (minimum 2 caractères)</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <code>limit</code
+                        ><span class="tag-optional">Optionnel</span>
+                      </td>
+                      <td><code>number</code></td>
+                      <td>Limite les résultats (défaut: 5)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <h4 class="font-semibold mb-3">Requête</h4>
+                  <div class="code-block">
+                    <pre><code class="language-http">GET /api/pokemons?name=pikachu&limit=10
+Authorization: Bearer &lt;token&gt;</code></pre>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-3">Réponse (200)</h4>
+                  <div class="code-block response-success">
+                    <pre><code class="language-json">{
+  "message": "La liste des pokémons...",
+  "data": [
+    {
+      "id": 25,
+      "name": "Pikachu",
+      "hp": 35,
+      "cp": 55,
+      "picture": "url...",
+      "types": ["electric"],
+      "created": "2024-01-15"
+    }
+  ]
+}</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 class="font-semibold mb-3">Codes d'erreur</h4>
+                <div class="space-y-3">
+                  <div class="response-error p-4 rounded">
+                    <p>
+                      <strong>400</strong> - Terme de recherche trop court (&lt;
+                      2 caractères)
+                    </p>
+                  </div>
+                  <div class="response-error p-4 rounded">
+                    <p><strong>401</strong> - Token invalide ou expiré</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Get Pokemon By ID -->
+            <div
+              id="get-pokemon-endpoint"
+              class="endpoint mb-12 bg-base-100 rounded-lg border border-base-300 p-8"
+            >
+              <div class="flex items-center gap-3 mb-6">
+                <span class="method-badge method-get">GET</span>
+                <code class="text-lg font-semibold">/api/pokemons/:id</code>
+              </div>
+              <p class="opacity-75 mb-6">
+                Récupère un pokémon spécifique par son ID.
+              </p>
+
+              <div class="mb-6">
+                <h4 class="font-semibold mb-3">Paramètres de route</h4>
+                <table class="parameter-table">
+                  <thead>
+                    <tr>
+                      <th>Nom</th>
+                      <th>Type</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <code>id</code><span class="tag-required">Requis</span>
+                      </td>
+                      <td><code>number</code></td>
+                      <td>ID du pokémon</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <h4 class="font-semibold mb-3">Requête</h4>
+                  <div class="code-block">
+                    <pre><code class="language-http">GET /api/pokemons/25
+Authorization: Bearer &lt;token&gt;</code></pre>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-3">Réponse (200)</h4>
+                  <div class="code-block response-success">
+                    <pre><code class="language-json">{
+  "message": "Pokemon trouvé",
+  "data": {
+    "id": 25,
+    "name": "Pikachu",
+    "hp": 35,
+    "cp": 55,
+    "picture": "url...",
+    "types": ["electric"]
+  }
+}</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 class="font-semibold mb-3">Codes d'erreur</h4>
+                <div class="space-y-3">
+                  <div class="response-error p-4 rounded">
+                    <p><strong>404</strong> - Pokémon non trouvé</p>
+                  </div>
+                  <div class="response-error p-4 rounded">
+                    <p><strong>401</strong> - Token invalide</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Create Pokemon -->
+            <div
+              id="create-pokemon-endpoint"
+              class="endpoint mb-12 bg-base-100 rounded-lg border border-base-300 p-8"
+            >
+              <div class="flex items-center gap-3 mb-6">
+                <span class="method-badge method-post">POST</span>
+                <code class="text-lg font-semibold">/api/pokemons</code>
+              </div>
+              <p class="opacity-75 mb-6">Crée un nouveau pokémon.</p>
+
+              <div class="mb-6">
+                <h4 class="font-semibold mb-3">Paramètres</h4>
+                <table class="parameter-table">
+                  <thead>
+                    <tr>
+                      <th>Nom</th>
+                      <th>Type</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <code>name</code
+                        ><span class="tag-required">Requis</span>
+                      </td>
+                      <td><code>string</code></td>
+                      <td>Nom du pokémon</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <code>hp</code><span class="tag-required">Requis</span>
+                      </td>
+                      <td><code>number</code></td>
+                      <td>Points de vie</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <code>cp</code><span class="tag-required">Requis</span>
+                      </td>
+                      <td><code>number</code></td>
+                      <td>Combat Power</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <code>picture</code
+                        ><span class="tag-optional">Optionnel</span>
+                      </td>
+                      <td><code>string</code></td>
+                      <td>URL de l'image</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <code>types</code
+                        ><span class="tag-optional">Optionnel</span>
+                      </td>
+                      <td><code>array</code></td>
+                      <td>Types (electric, water, etc)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <h4 class="font-semibold mb-3">Requête</h4>
+                  <div class="code-block">
+                    <pre><code class="language-json">{
+  "name": "Pikachu",
+  "hp": 35,
+  "cp": 55,
+  "picture": "url...",
+  "types": ["electric"]
+}</code></pre>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-3">Réponse (201)</h4>
+                  <div class="code-block response-success">
+                    <pre><code class="language-json">{
+  "message": "Pokemon créé",
+  "data": {
+    "id": 25,
+    "name": "Pikachu",
+    "hp": 35,
+    "cp": 55,
+    "picture": "url...",
+    "types": ["electric"]
+  }
+}</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 class="font-semibold mb-3">Codes d'erreur</h4>
+                <div class="space-y-3">
+                  <div class="response-error p-4 rounded">
+                    <p>
+                      <strong>400</strong> - Données manquantes ou invalides
+                    </p>
+                  </div>
+                  <div class="response-error p-4 rounded">
+                    <p><strong>401</strong> - Non autorisé</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Update Pokemon -->
+            <div
+              id="update-pokemon-endpoint"
+              class="endpoint mb-12 bg-base-100 rounded-lg border border-base-300 p-8"
+            >
+              <div class="flex items-center gap-3 mb-6">
+                <span class="method-badge method-put">PUT</span>
+                <code class="text-lg font-semibold">/api/pokemons/:id</code>
+              </div>
+              <p class="opacity-75 mb-6">Met à jour un pokémon existant.</p>
+
+              <div class="mb-6">
+                <h4 class="font-semibold mb-3">Paramètres</h4>
+                <table class="parameter-table">
+                  <thead>
+                    <tr>
+                      <th>Nom</th>
+                      <th>Type</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <code>id</code><span class="tag-required">Requis</span>
+                      </td>
+                      <td><code>number</code></td>
+                      <td>ID du pokémon (dans l'URL)</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <code>name</code
+                        ><span class="tag-optional">Optionnel</span>
+                      </td>
+                      <td><code>string</code></td>
+                      <td>Nouveau nom</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <code>hp</code
+                        ><span class="tag-optional">Optionnel</span>
+                      </td>
+                      <td><code>number</code></td>
+                      <td>Nouveaux HP</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <code>cp</code
+                        ><span class="tag-optional">Optionnel</span>
+                      </td>
+                      <td><code>number</code></td>
+                      <td>Nouveau CP</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <h4 class="font-semibold mb-3">Requête</h4>
+                  <div class="code-block">
+                    <pre><code class="language-json">{
+  "name": "Raichu",
+  "hp": 60,
+  "cp": 90
+}</code></pre>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-3">Réponse (200)</h4>
+                  <div class="code-block response-success">
+                    <pre><code class="language-json">{
+  "message": "Pokemon mis à jour",
+  "data": {
+    "id": 25,
+    "name": "Raichu",
+    "hp": 60,
+    "cp": 90
+  }
+}</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 class="font-semibold mb-3">Codes d'erreur</h4>
+                <div class="space-y-3">
+                  <div class="response-error p-4 rounded">
+                    <p><strong>404</strong> - Pokémon non trouvé</p>
+                  </div>
+                  <div class="response-error p-4 rounded">
+                    <p><strong>400</strong> - Données invalides</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Delete Pokemon -->
+            <div
+              id="delete-pokemon-endpoint"
+              class="endpoint mb-12 bg-base-100 rounded-lg border border-base-300 p-8"
+            >
+              <div class="flex items-center gap-3 mb-6">
+                <span class="method-badge method-delete">DELETE</span>
+                <code class="text-lg font-semibold">/api/pokemons/:id</code>
+              </div>
+              <p class="opacity-75 mb-6">Supprime un pokémon.</p>
+
+              <div class="mb-6">
+                <h4 class="font-semibold mb-3">Paramètres de route</h4>
+                <table class="parameter-table">
+                  <thead>
+                    <tr>
+                      <th>Nom</th>
+                      <th>Type</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <code>id</code><span class="tag-required">Requis</span>
+                      </td>
+                      <td><code>number</code></td>
+                      <td>ID du pokémon</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <h4 class="font-semibold mb-3">Requête</h4>
+                  <div class="code-block">
+                    <pre><code class="language-http">DELETE /api/pokemons/25
+Authorization: Bearer &lt;token&gt;</code></pre>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-3">Réponse (200)</h4>
+                  <div class="code-block response-success">
+                    <pre><code class="language-json">{
+  "message": "Pokemon supprimé avec succès"
+}</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 class="font-semibold mb-3">Codes d'erreur</h4>
+                <div class="space-y-3">
+                  <div class="response-error p-4 rounded">
+                    <p><strong>404</strong> - Pokémon non trouvé</p>
+                  </div>
+                  <div class="response-error p-4 rounded">
+                    <p><strong>401</strong> - Non autorisé</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Status Codes -->
+          <section id="status-codes" class="endpoint mb-16">
+            <div class="section-title">
+              <h2 class="text-3xl font-bold" data-i18n="status_codes">
+                📊 Codes de Statut HTTP
+              </h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="response-success p-6 rounded-lg">
+                <h4 class="font-semibold mb-2"><strong>200 OK</strong></h4>
+                <p class="text-sm">Requête réussie</p>
+              </div>
+              <div class="response-success p-6 rounded-lg">
+                <h4 class="font-semibold mb-2"><strong>201 Created</strong></h4>
+                <p class="text-sm">Ressource créée avec succès</p>
+              </div>
+              <div class="response-error p-6 rounded-lg">
+                <h4 class="font-semibold mb-2">
+                  <strong>400 Bad Request</strong>
+                </h4>
+                <p class="text-sm">Requête mal formée</p>
+              </div>
+              <div class="response-error p-6 rounded-lg">
+                <h4 class="font-semibold mb-2">
+                  <strong>401 Unauthorized</strong>
+                </h4>
+                <p class="text-sm">Authentification requise</p>
+              </div>
+              <div class="response-error p-6 rounded-lg">
+                <h4 class="font-semibold mb-2">
+                  <strong>404 Not Found</strong>
+                </h4>
+                <p class="text-sm">Ressource non trouvée</p>
+              </div>
+              <div class="response-error p-6 rounded-lg">
+                <h4 class="font-semibold mb-2">
+                  <strong>500 Server Error</strong>
+                </h4>
+                <p class="text-sm">Erreur serveur</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Exemples -->
+          <section id="examples" class="endpoint mb-16">
+            <div class="section-title">
+              <h2 class="text-3xl font-bold" data-i18n="examples">
+                💡 Exemples Pratiques
+              </h2>
+            </div>
+
+            <div class="bg-base-100 rounded-lg border border-base-300 p-8 mb-6">
+              <h3 class="text-xl font-semibold mb-4">
+                1. Authentification complet
+              </h3>
+              <div class="code-block mb-4">
+                <pre><code class="language-javascript">// 1. Se connecter
+const loginResponse = await fetch('http://localhost:3000/api/login', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    username: 'pikachu',
+    password: '123456'
+  })
+});
+
+const { token } = await loginResponse.json();
+
+// 2. Utiliser le token
+const response = await fetch('http://localhost:3000/api/pokemons', {
+  headers: {
+    'Authorization': `Bearer ${token}`
+  }
+});
+
+const data = await response.json();
+console.log(data);</code></pre>
+              </div>
+            </div>
+
+            <div class="bg-base-100 rounded-lg border border-base-300 p-8 mb-6">
+              <h3 class="text-xl font-semibold mb-4">
+                2. Rechercher un pokémon
+              </h3>
+              <div class="code-block">
+                <pre><code class="language-bash">curl -X GET 'http://localhost:3000/api/pokemons?name=pika&limit=10' \
+  -H 'Authorization: Bearer YOUR_TOKEN'</code></pre>
+              </div>
+            </div>
+
+            <div class="bg-base-100 rounded-lg border border-base-300 p-8">
+              <h3 class="text-xl font-semibold mb-4">3. Créer un pokémon</h3>
+              <div class="code-block">
+                <pre><code class="language-bash">curl -X POST 'http://localhost:3000/api/pokemons' \
+  -H 'Authorization: Bearer YOUR_TOKEN' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "name": "Pikachu",
+    "hp": 35,
+    "cp": 55,
+    "types": ["electric"]
+  }'</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Footer -->
+          <footer
+            class="mt-16 pt-8 border-t border-base-300 text-center opacity-75"
+          >
+            <p data-i18n="footer">© 2024 Pokédex API - Documentation v1.0</p>
+          </footer>
+        </main>
       </div>
 
-      <!-- Liste des Pokémon -->
-      <div id="pokemonList" class="pokemon-list"></div>
-      <div id="loading" class="loading">Chargement des Pokémon...</div>
+      <!-- Sidebar (Drawer) -->
+      <div class="drawer-side">
+        <label for="drawer-toggle" class="drawer-overlay"></label>
+        <aside class="sidebar p-4 w-64 bg-base-100 border-r border-base-300">
+          <h3 class="font-bold text-lg mb-6" data-i18n="navigation">
+            Navigation
+          </h3>
+          <ul class="space-y-2">
+            <li>
+              <a href="#intro" class="nav-item active">🚀 Introduction</a>
+            </li>
+            <li><a href="#auth" class="nav-item">🔐 Authentification</a></li>
+            <li class="mt-6">
+              <p class="font-semibold text-sm uppercase tracking-wide">
+                Endpoints
+              </p>
+              <ul class="ml-3 space-y-2 mt-3">
+                <li>
+                  <a href="#login-endpoint" class="nav-item">POST /login</a>
+                </li>
+                <li>
+                  <a href="#get-pokemons-endpoint" class="nav-item"
+                    >GET /pokemons</a
+                  >
+                </li>
+                <li>
+                  <a href="#get-pokemon-endpoint" class="nav-item"
+                    >GET /pokemons/:id</a
+                  >
+                </li>
+                <li>
+                  <a href="#create-pokemon-endpoint" class="nav-item"
+                    >POST /pokemons</a
+                  >
+                </li>
+                <li>
+                  <a href="#update-pokemon-endpoint" class="nav-item"
+                    >PUT /pokemons/:id</a
+                  >
+                </li>
+                <li>
+                  <a href="#delete-pokemon-endpoint" class="nav-item"
+                    >DELETE /pokemons/:id</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li class="mt-6">
+              <p
+                class="font-semibold text-sm uppercase tracking-wide"
+                data-i18n="reference"
+              >
+                Référence
+              </p>
+              <ul class="ml-3 space-y-2 mt-3">
+                <li>
+                  <a href="#status-codes" class="nav-item"
+                    >📊 Codes de Statut</a
+                  >
+                </li>
+                <li><a href="#examples" class="nav-item">💡 Exemples</a></li>
+              </ul>
+            </li>
+          </ul>
+        </aside>
+      </div>
     </div>
 
     <script>
-      const API_URL = "http://localhost:3000/api/pokemons";
-      let isEditing = false;
+      hljs.highlightAll();
 
-      // Charger les Pokémon au démarrage
-      document.addEventListener("DOMContentLoaded", loadPokemons);
+      // ==================== TRANSLATIONS ====================
+      const translations = {
+        fr: {
+          title: "Pokédex API",
+          subtitle: "Documentation complète de l'API RESTful Pokédex",
+          base_url: "📍 URL de Base",
+          authentication: "🔐 Authentification",
+          format: "📝 Format",
+          auth_section: "🔐 Authentification",
+          auth_desc:
+            "Important : Tous les endpoints (sauf login) nécessitent un JWT token valide dans l'en-tête Authorization.",
+          auth_header: "En-tête Authorization",
+          auth_note:
+            "Le token est obtenu via l'endpoint de login et est valide pendant 24 heures.",
+          endpoints: "📚 Endpoints",
+          status_codes: "📊 Codes de Statut HTTP",
+          examples: "💡 Exemples Pratiques",
+          navigation: "Navigation",
+          reference: "Référence",
+          footer: "© 2024 Pokédex API - Documentation v1.0",
 
-      // Gestion du formulaire
-      document
-        .getElementById("pokemonForm")
-        .addEventListener("submit", handleSubmit);
-      document.getElementById("cancelBtn").addEventListener("click", resetForm);
+          // Endpoints descriptions
+          login_desc: "Authentifie un utilisateur et retourne un JWT token.",
+          login_params: "Paramètres",
+          login_response: "Réponse (200)",
+          login_errors: "Codes d'erreur",
 
-      // Charger tous les Pokémon
-      async function loadPokemons() {
-        try {
-          const response = await fetch(API_URL);
-          const result = await response.json();
-          displayPokemons(result.data);
-        } catch (error) {
-          showNotification("Erreur lors du chargement des Pokémon", "error");
-          console.error(error);
-        }
+          get_all_desc:
+            "Récupère la liste des pokémons avec filtrage optionnel.",
+          get_all_params: "Paramètres de requête",
+          get_one_desc: "Récupère un pokémon spécifique par son ID.",
+          get_one_params: "Paramètres de route",
+
+          create_desc: "Crée un nouveau pokémon.",
+          create_params: "Paramètres",
+          create_response: "Réponse (201)",
+
+          update_desc: "Met à jour un pokémon existant.",
+          update_params: "Paramètres",
+          update_response: "Réponse (200)",
+
+          delete_desc: "Supprime un pokémon.",
+          delete_params: "Paramètres de route",
+          delete_response: "Réponse (200)",
+
+          // Parameter names
+          param_name: "Nom",
+          param_type: "Type",
+          param_description: "Description",
+          param_username: "Nom d'utilisateur",
+          param_password: "Mot de passe",
+          param_search: "Filtre par nom (minimum 2 caractères)",
+          param_limit: "Limite les résultats (défaut: 5)",
+          param_id: "ID du pokémon",
+          param_hp: "Points de vie",
+          param_cp: "Combat Power",
+          param_picture: "URL de l'image",
+          param_types: "Types (electric, water, etc)",
+
+          // Tags
+          required: "Requis",
+          optional: "Optionnel",
+
+          // Status codes
+          status_200: "200 OK",
+          status_201: "201 Created",
+          status_400: "400 Bad Request",
+          status_401: "401 Unauthorized",
+          status_404: "404 Not Found",
+          status_500: "500 Server Error",
+
+          status_200_desc: "Requête réussie",
+          status_201_desc: "Ressource créée avec succès",
+          status_400_desc: "Requête mal formée",
+          status_401_desc: "Authentification requise",
+          status_404_desc: "Ressource non trouvée",
+          status_500_desc: "Erreur serveur",
+
+          // Error messages
+          error_404_user: "Utilisateur non trouvé",
+          error_401_pwd: "Mot de passe incorrect",
+          error_500: "Erreur serveur",
+          error_400_search: "Terme de recherche trop court (< 2 caractères)",
+          error_401_token: "Token invalide ou expiré",
+          error_404_pokemon: "Pokémon non trouvé",
+          error_401: "Non autorisé",
+          error_400_data: "Données manquantes ou invalides",
+          error_400_invalid: "Données invalides",
+
+          // Example titles
+          example_1: "1. Authentification complet",
+          example_2: "2. Rechercher un pokémon",
+          example_3: "3. Créer un pokémon",
+
+          // Messages
+          success_connected: "Connexion réussie",
+          success_created: "Pokemon créé",
+          success_updated: "Pokemon mis à jour",
+          success_deleted: "Pokemon supprimé avec succès",
+          message_found: "Pokemon trouvé",
+          message_list: "La liste des pokémons...",
+        },
+        en: {
+          title: "Pokédex API",
+          subtitle: "Complete API RESTful Documentation for Pokédex",
+          base_url: "📍 Base URL",
+          authentication: "🔐 Authentication",
+          format: "📝 Format",
+          auth_section: "🔐 Authentication",
+          auth_desc:
+            "Important: All endpoints (except login) require a valid JWT token in the Authorization header.",
+          auth_header: "Authorization Header",
+          auth_note:
+            "The token is obtained via the login endpoint and is valid for 24 hours.",
+          endpoints: "📚 Endpoints",
+          status_codes: "📊 HTTP Status Codes",
+          examples: "💡 Practical Examples",
+          navigation: "Navigation",
+          reference: "Reference",
+          footer: "© 2024 Pokédex API - Documentation v1.0",
+
+          // Endpoints descriptions
+          login_desc: "Authenticates a user and returns a JWT token.",
+          login_params: "Parameters",
+          login_response: "Response (200)",
+          login_errors: "Error Codes",
+
+          get_all_desc:
+            "Retrieves the list of Pokémon with optional filtering.",
+          get_all_params: "Query Parameters",
+          get_one_desc: "Retrieves a specific Pokémon by its ID.",
+          get_one_params: "Route Parameters",
+
+          create_desc: "Creates a new Pokémon.",
+          create_params: "Parameters",
+          create_response: "Response (201)",
+
+          update_desc: "Updates an existing Pokémon.",
+          update_params: "Parameters",
+          update_response: "Response (200)",
+
+          delete_desc: "Deletes a Pokémon.",
+          delete_params: "Route Parameters",
+          delete_response: "Response (200)",
+
+          // Parameter names
+          param_name: "Name",
+          param_type: "Type",
+          param_description: "Description",
+          param_username: "Username",
+          param_password: "Password",
+          param_search: "Filter by name (minimum 2 characters)",
+          param_limit: "Limit results (default: 5)",
+          param_id: "Pokémon ID",
+          param_hp: "Health Points",
+          param_cp: "Combat Power",
+          param_picture: "Image URL",
+          param_types: "Types (electric, water, etc)",
+
+          // Tags
+          required: "Required",
+          optional: "Optional",
+
+          // Status codes
+          status_200: "200 OK",
+          status_201: "201 Created",
+          status_400: "400 Bad Request",
+          status_401: "401 Unauthorized",
+          status_404: "404 Not Found",
+          status_500: "500 Server Error",
+
+          status_200_desc: "Request successful",
+          status_201_desc: "Resource created successfully",
+          status_400_desc: "Malformed request",
+          status_401_desc: "Authentication required",
+          status_404_desc: "Resource not found",
+          status_500_desc: "Server error",
+
+          // Error messages
+          error_404_user: "User not found",
+          error_401_pwd: "Incorrect password",
+          error_500: "Server error",
+          error_400_search: "Search term too short (< 2 characters)",
+          error_401_token: "Invalid or expired token",
+          error_404_pokemon: "Pokémon not found",
+          error_401: "Unauthorized",
+          error_400_data: "Missing or invalid data",
+          error_400_invalid: "Invalid data",
+
+          // Example titles
+          example_1: "1. Complete Authentication",
+          example_2: "2. Search for a Pokémon",
+          example_3: "3. Create a Pokémon",
+
+          // Messages
+          success_connected: "Connection successful",
+          success_created: "Pokémon created",
+          success_updated: "Pokémon updated",
+          success_deleted: "Pokémon deleted successfully",
+          message_found: "Pokémon found",
+          message_list: "List of Pokémon...",
+        },
+      };
+
+      // Get stored language or default to French
+      let currentLanguage = localStorage.getItem("language") || "fr";
+
+      // Apply initial language and theme
+      document.documentElement.lang = currentLanguage;
+      updateLanguage(currentLanguage);
+      applyThemePreference();
+
+      // ==================== LANGUAGE FUNCTIONS ====================
+      function setLanguage(lang) {
+        currentLanguage = lang;
+        localStorage.setItem("language", lang);
+        document.documentElement.lang = lang;
+        updateLanguage(lang);
+        updateLangIcon(lang);
       }
 
-      // Afficher les Pokémon
-      function displayPokemons(pokemons) {
-        const listContainer = document.getElementById("pokemonList");
-        const loading = document.getElementById("loading");
+      function updateLanguage(lang) {
+        const t = translations[lang];
 
-        loading.classList.add("hidden");
-        listContainer.innerHTML = "";
-
-        if (pokemons.length === 0) {
-          listContainer.innerHTML =
-            '<p style="color: white; text-align: center; grid-column: 1/-1;">Aucun Pokémon trouvé</p>';
-          return;
-        }
-
-        pokemons.forEach((pokemon) => {
-          const card = createPokemonCard(pokemon);
-          listContainer.appendChild(card);
+        // Update all elements with data-i18n attribute
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.getAttribute("data-i18n");
+          if (t[key]) {
+            el.textContent = t[key];
+          }
         });
-      }
 
-      // Créer une carte Pokémon
-      function createPokemonCard(pokemon) {
-        const card = document.createElement("div");
-        card.className = "pokemon-card";
+        // Update placeholder
+        const searchInput = document.getElementById("search");
+        if (searchInput) {
+          searchInput.placeholder =
+            t.base_url === "📍 URL de Base" ? "Rechercher..." : "Search...";
+        }
 
-        const typesArray = Array.isArray(pokemon.types)
-          ? pokemon.types
-          : pokemon.types.split(",");
-
-        card.innerHTML = `
-              <img src="${pokemon.picture}" alt="${pokemon.name}" class="pokemon-image" onerror="this.src='https://via.placeholder.com/300x200?text=Image+non+disponible'" />
-              <h3 class="pokemon-name">${pokemon.name}</h3>
-              <div class="pokemon-stats">
-                <div class="stat">
-                  <div class="stat-label">HP</div>
-                  <div class="stat-value">${pokemon.hp}</div>
-                </div>
-                <div class="stat">
-                  <div class="stat-label">CP</div>
-                  <div class="stat-value">${pokemon.cp}</div>
-                </div>
-              </div>
-              <div class="pokemon-types">
-                ${typesArray.map((type) => `<span class="type-badge">${type.trim()}</span>`).join("")}
-              </div>
-              <div class="pokemon-actions">
-                <button class="btn btn-warning" onclick="editPokemon(${pokemon.id})">Modifier</button>
-                <button class="btn btn-danger" onclick="deletePokemon(${pokemon.id})">Supprimer</button>
-              </div>
-            `;
-
-        return card;
-      }
-
-      // Gérer la soumission du formulaire
-      async function handleSubmit(e) {
-        e.preventDefault();
-
-        const pokemonData = {
-          name: document.getElementById("name").value,
-          hp: parseInt(document.getElementById("hp").value),
-          cp: parseInt(document.getElementById("cp").value),
-          picture: document.getElementById("picture").value,
-          types: document.getElementById("types").value,
+        // Text replacement mapping for dynamic content
+        const textMapping = {
+          fr: {
+            "Authentifie un utilisateur et retourne un JWT token.":
+              "Authentifie un utilisateur et retourne un JWT token.",
+            "Récupère la liste des pokémons avec filtrage optionnel.":
+              "Récupère la liste des pokémons avec filtrage optionnel.",
+            "Récupère un pokémon spécifique par son ID.":
+              "Récupère un pokémon spécifique par son ID.",
+            "Crée un nouveau pokémon.": "Crée un nouveau pokémon.",
+            "Met à jour un pokémon existant.":
+              "Met à jour un pokémon existant.",
+            "Supprime un pokémon.": "Supprime un pokémon.",
+            Paramètres: "Paramètres",
+            "Paramètres de requête": "Paramètres de requête",
+            "Paramètres de route": "Paramètres de route",
+            Nom: "Nom",
+            Type: "Type",
+            Description: "Description",
+            "Nom d'utilisateur": "Nom d'utilisateur",
+            "Mot de passe": "Mot de passe",
+            "Filtre par nom (minimum 2 caractères)":
+              "Filtre par nom (minimum 2 caractères)",
+            "Limite les résultats (défaut: 5)":
+              "Limite les résultats (défaut: 5)",
+            "ID du pokémon": "ID du pokémon",
+            "Points de vie": "Points de vie",
+            "Combat Power": "Combat Power",
+            "URL de l'image": "URL de l'image",
+            "Types (electric, water, etc)": "Types (electric, water, etc)",
+            Requis: "Requis",
+            Optionnel: "Optionnel",
+            Requête: "Requête",
+            "Réponse (200)": "Réponse (200)",
+            "Réponse (201)": "Réponse (201)",
+            "Codes d'erreur": "Codes d'erreur",
+            "Codes de Statut": "Codes de Statut",
+            "200 OK": "200 OK",
+            "201 Created": "201 Created",
+            "400 Bad Request": "400 Bad Request",
+            "401 Unauthorized": "401 Unauthorized",
+            "404 Not Found": "404 Not Found",
+            "500 Server Error": "500 Server Error",
+            "Requête réussie": "Requête réussie",
+            "Ressource créée avec succès": "Ressource créée avec succès",
+            "Requête mal formée": "Requête mal formée",
+            "Authentification requise": "Authentification requise",
+            "Ressource non trouvée": "Ressource non trouvée",
+            "Erreur serveur": "Erreur serveur",
+            "Utilisateur non trouvé": "Utilisateur non trouvé",
+            "Mot de passe incorrect": "Mot de passe incorrect",
+            "Terme de recherche trop court (< 2 caractères)":
+              "Terme de recherche trop court (< 2 caractères)",
+            "Token invalide ou expiré": "Token invalide ou expiré",
+            "Pokémon non trouvé": "Pokémon non trouvé",
+            "Non autorisé": "Non autorisé",
+            "Données manquantes ou invalides":
+              "Données manquantes ou invalides",
+            "Données invalides": "Données invalides",
+            "1. Authentification complet": "1. Authentification complet",
+            "2. Rechercher un pokémon": "2. Rechercher un pokémon",
+            "3. Créer un pokémon": "3. Créer un pokémon",
+            "Connexion réussie": "Connexion réussie",
+            "Pokemon créé": "Pokemon créé",
+            "Pokemon mis à jour": "Pokemon mis à jour",
+            "Pokemon supprimé avec succès": "Pokemon supprimé avec succès",
+            "Pokemon trouvé": "Pokemon trouvé",
+            "La liste des pokémons...": "La liste des pokémons...",
+          },
+          en: {
+            "Authentifie un utilisateur et retourne un JWT token.":
+              "Authenticates a user and returns a JWT token.",
+            "Récupère la liste des pokémons avec filtrage optionnel.":
+              "Retrieves the list of Pokémon with optional filtering.",
+            "Récupère un pokémon spécifique par son ID.":
+              "Retrieves a specific Pokémon by its ID.",
+            "Crée un nouveau pokémon.": "Creates a new Pokémon.",
+            "Met à jour un pokémon existant.": "Updates an existing Pokémon.",
+            "Supprime un pokémon.": "Deletes a Pokémon.",
+            Paramètres: "Parameters",
+            "Paramètres de requête": "Query Parameters",
+            "Paramètres de route": "Route Parameters",
+            Nom: "Name",
+            Type: "Type",
+            Description: "Description",
+            "Nom d'utilisateur": "Username",
+            "Mot de passe": "Password",
+            "Filtre par nom (minimum 2 caractères)":
+              "Filter by name (minimum 2 characters)",
+            "Limite les résultats (défaut: 5)": "Limit results (default: 5)",
+            "ID du pokémon": "Pokémon ID",
+            "Points de vie": "Health Points",
+            "Combat Power": "Combat Power",
+            "URL de l'image": "Image URL",
+            "Types (electric, water, etc)": "Types (electric, water, etc)",
+            Requis: "Required",
+            Optionnel: "Optional",
+            Requête: "Request",
+            "Réponse (200)": "Response (200)",
+            "Réponse (201)": "Response (201)",
+            "Codes d'erreur": "Error Codes",
+            "Codes de Statut": "Status Codes",
+            "200 OK": "200 OK",
+            "201 Created": "201 Created",
+            "400 Bad Request": "400 Bad Request",
+            "401 Unauthorized": "401 Unauthorized",
+            "404 Not Found": "404 Not Found",
+            "500 Server Error": "500 Server Error",
+            "Requête réussie": "Request successful",
+            "Ressource créée avec succès": "Resource created successfully",
+            "Requête mal formée": "Malformed request",
+            "Authentification requise": "Authentication required",
+            "Ressource non trouvée": "Resource not found",
+            "Erreur serveur": "Server error",
+            "Utilisateur non trouvé": "User not found",
+            "Mot de passe incorrect": "Incorrect password",
+            "Terme de recherche trop court (< 2 caractères)":
+              "Search term too short (< 2 characters)",
+            "Token invalide ou expiré": "Invalid or expired token",
+            "Pokémon non trouvé": "Pokémon not found",
+            "Non autorisé": "Unauthorized",
+            "Données manquantes ou invalides": "Missing or invalid data",
+            "Données invalides": "Invalid data",
+            "1. Authentification complet": "1. Complete Authentication",
+            "2. Rechercher un pokémon": "2. Search for a Pokémon",
+            "3. Créer un pokémon": "3. Create a Pokémon",
+            "Connexion réussie": "Connection successful",
+            "Pokemon créé": "Pokémon created",
+            "Pokemon mis à jour": "Pokémon updated",
+            "Pokemon supprimé avec succès": "Pokémon deleted successfully",
+            "Pokemon trouvé": "Pokémon found",
+            "La liste des pokémons...": "List of Pokémon...",
+          },
         };
 
-        try {
-          if (isEditing) {
-            const pokemonId = document.getElementById("pokemonId").value;
-            await updatePokemon(pokemonId, pokemonData);
-          } else {
-            await createPokemon(pokemonData);
-          }
-          resetForm();
-          loadPokemons();
-        } catch (error) {
-          showNotification("Erreur lors de l'opération", "error");
-          console.error(error);
-        }
-      }
+        // Replace text content in the main area
+        const main = document.querySelector("main");
+        if (main) {
+          let html = main.innerHTML;
+          const mapping = textMapping[lang] || textMapping.fr;
 
-      // Créer un Pokémon
-      async function createPokemon(data) {
-        const response = await fetch(API_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
+          // Replace each text pair
+          Object.entries(mapping).forEach(([frText, enText]) => {
+            const targetText = lang === "fr" ? frText : enText;
+            const replaceText =
+              lang === "fr" ? frText : textMapping.en[frText] || enText;
 
-        if (response.ok) {
-          showNotification("Pokémon ajouté avec succès!", "success");
-        } else {
-          throw new Error("Erreur lors de la création", response);
-        }
-      }
-
-      // Modifier un Pokémon
-      async function updatePokemon(id, data) {
-        const response = await fetch(`${API_URL}/${id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-
-        if (response.ok) {
-          showNotification("Pokémon modifié avec succès!", "success");
-        } else {
-          throw new Error("Erreur lors de la modification");
-        }
-      }
-
-      // Supprimer un Pokémon
-      async function deletePokemon(id) {
-        if (!confirm("Êtes-vous sûr de vouloir supprimer ce Pokémon?")) {
-          return;
-        }
-
-        try {
-          const response = await fetch(`${API_URL}/${id}`, {
-            method: "DELETE",
+            if (lang === "en") {
+              html = html.replace(
+                new RegExp(frText.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g"),
+                enText,
+              );
+            }
           });
 
-          if (response.ok) {
-            showNotification("Pokémon supprimé avec succès!", "success");
-            loadPokemons();
-          } else {
-            throw new Error("Erreur lors de la suppression");
+          main.innerHTML = html;
+
+          // Re-highlight code blocks
+          document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+          });
+        }
+      }
+
+      function updateLangIcon(lang) {
+        const icon = document.getElementById("langIcon");
+        if (icon) {
+          icon.textContent = lang === "fr" ? "🇫🇷" : "🇬🇧";
+        }
+      }
+
+      // ==================== THEME FUNCTIONS ====================
+      function applyThemePreference() {
+        const theme = localStorage.getItem("theme") || "light";
+        const html = document.documentElement;
+        const themeToggle = document.querySelector('[id="themeToggle"] input');
+
+        html.setAttribute("data-theme", theme);
+        if (themeToggle) {
+          themeToggle.checked = theme === "dark";
+        }
+      }
+
+      // Theme toggle listener
+      const themeToggle = document.querySelector('[id="themeToggle"] input');
+      if (themeToggle) {
+        themeToggle.addEventListener("change", function () {
+          const theme = this.checked ? "dark" : "light";
+          localStorage.setItem("theme", theme);
+          document.documentElement.setAttribute("data-theme", theme);
+        });
+      }
+
+      // ==================== NAVIGATION & SEARCH ====================
+      const navItems = document.querySelectorAll(".nav-item");
+      const sections = document.querySelectorAll(".endpoint");
+
+      navItems.forEach((item) => {
+        item.addEventListener("click", () => {
+          navItems.forEach((i) => i.classList.remove("active"));
+          item.classList.add("active");
+        });
+      });
+
+      // Update active nav item on scroll
+      window.addEventListener("scroll", () => {
+        let current = "";
+        sections.forEach((section) => {
+          const sectionTop = section.offsetTop;
+          if (pageYOffset >= sectionTop - 200) {
+            current = section.getAttribute("id");
           }
-        } catch (error) {
-          showNotification("Erreur lors de la suppression", "error");
-          console.error(error);
-        }
+        });
+
+        navItems.forEach((item) => {
+          item.classList.remove("active");
+          if (item.getAttribute("href") === `#${current}`) {
+            item.classList.add("active");
+          }
+        });
+      });
+
+      // Search functionality
+      const searchInput = document.getElementById("search");
+      if (searchInput) {
+        searchInput.addEventListener("keyup", function () {
+          const searchTerm = this.value.toLowerCase();
+          sections.forEach((section) => {
+            const text = section.textContent.toLowerCase();
+            section.style.display = text.includes(searchTerm)
+              ? "block"
+              : "none";
+          });
+        });
       }
-
-      // Préparer le formulaire pour l'édition
-      async function editPokemon(id) {
-        try {
-          const response = await fetch(`${API_URL}/${id}`);
-          const result = await response.json();
-          const pokemon = result.data;
-
-          document.getElementById("pokemonId").value = pokemon.id;
-          document.getElementById("name").value = pokemon.name;
-          document.getElementById("hp").value = pokemon.hp;
-          document.getElementById("cp").value = pokemon.cp;
-          document.getElementById("picture").value = pokemon.picture;
-          document.getElementById("types").value = Array.isArray(pokemon.types)
-            ? pokemon.types.join(",")
-            : pokemon.types;
-
-          isEditing = true;
-          document.getElementById("formTitle").textContent =
-            "Modifier le Pokémon";
-          document.getElementById("submitBtn").textContent = "Modifier";
-          document.getElementById("cancelBtn").classList.remove("hidden");
-
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        } catch (error) {
-          showNotification("Erreur lors du chargement du Pokémon", "error");
-          console.error(error);
-        }
-      }
-
-      // Réinitialiser le formulaire
-      function resetForm() {
-        document.getElementById("pokemonForm").reset();
-        document.getElementById("pokemonId").value = "";
-        isEditing = false;
-        document.getElementById("formTitle").textContent = "Ajouter un Pokémon";
-        document.getElementById("submitBtn").textContent = "Ajouter";
-        document.getElementById("cancelBtn").classList.add("hidden");
-      }
-
-      // Afficher une notification
-      function showNotification(message, type) {
-        const notification = document.createElement("div");
-        notification.className = `notification ${type}`;
-        notification.textContent = message;
-        document.body.appendChild(notification);
-
-        setTimeout(() => {
-          notification.remove();
-        }, 3000);
-      }
-      // Audio DB API API Example
     </script>
   </body>
 </html>

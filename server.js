@@ -1,6 +1,5 @@
 require("dotenv/config");
 const express = require("express");
-const morgan = require("morgan");
 const favicon = require("serve-favicon");
 const sequelize = require("./src/db/sequelize");
 
@@ -12,7 +11,6 @@ app.use((req, res, next) => {
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(morgan("dev"));
 app.use(express.static("public"));
 app.use(favicon(__dirname + "/public/favicon.svg"));
 

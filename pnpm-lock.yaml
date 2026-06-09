@@ -225,9 +225,6 @@ importers:
       mariadb:
         specifier: ^3.5.2
         version: 3.5.2
-      nodemon:
-        specifier: ^3.1.14
-        version: 3.1.14
       sequelize:
         specifier: ^6.37.8
         version: 6.37.8(mariadb@3.5.2)
@@ -238,6 +235,9 @@ importers:
       morgan:
         specifier: ^1.10.1
         version: 1.10.1
+      nodemon:
+        specifier: ^3.1.14
+        version: 3.1.14
 
 packages:
 

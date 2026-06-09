@@ -1,3 +1,5 @@
+dev/
+.env
 pnpm-lock.yaml
 pnpm-workspace.yaml
 
@@ -25,3 +27,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
