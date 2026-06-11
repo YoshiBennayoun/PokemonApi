@@ -14,11 +14,11 @@ module.exports = (app) => {
           if (!pokemon) {
             return res.status(404).json({
               message:
-                "Le pokémon n'existe pas. Réessayer avec un autre identifiant",
+                "The pokemon does not exist. Please try with another identifier",
             });
           }
           res.json({
-            message: `Le pokémon ${pokemon.name} a bien été modifié.`,
+            message: `The pokemon ${pokemon.name} has been successfully modified.`,
             data: pokemon,
           });
         });
@@ -29,7 +29,7 @@ module.exports = (app) => {
         }
         res
           .status(500)
-          .json({ message: "le pokemon n'a pas pu être modifié", data: error });
+          .json({ message: "The pokemon could not be modified", data: error });
       });
   });
 };

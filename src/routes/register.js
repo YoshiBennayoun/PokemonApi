@@ -8,7 +8,7 @@ module.exports = (app) => {
   app.post("/api/register", auth, async (req, res) => {
     const { username, password } = req.body;
     const passwordHashed = await bcrypt.hash(password, 12);
-    // TODO: Implement registration logic
+    
     User.create({ username, password: passwordHashed })
       .then((user) => {
         res.status(201).json({
@@ -16,6 +16,8 @@ module.exports = (app) => {
           user: {
             id: user.id,
             username: user.username,
+            password: user.password,
+            createdAt: user.createdAt,
             token: jwt.sign({ userId: user.id }, private_key, {
               expiresIn: "24h",
             }),
@@ -25,7 +27,7 @@ module.exports = (app) => {
       .catch((error) => {
         res.status(500).json({
           message:
-            "Impossible d'enregistrer le user. Réessayer dans quelque instants",
+            "The user could not be created. Please try again in a few moments",
           error,
         });
       });

@@ -1,21 +1,21 @@
 const validTypes = [
-  "Feu",
-  "Eau",
-  "Plante",
+  "Fire",
+  "Water",
+  "Grass",
   "Poison",
-  "Fée",
-  "Psy",
-  "Vol",
-  "Insecte",
-  "Roche",
-  "Acier",
-  "Tenebres",
-  "Combat",
+  "Fairy",
+  "Psychic",
+  "Flying",
+  "Bug",
+  "Rock",
+  "Steel",
+  "Dark",
+  "Fighting",
   "Normal",
-  "Glace",
+  "Ice",
   "Dragon",
-  "Spectre",
-  "Sol",
+  "Ghost",
+  "Ground",
 ];
 /**
  *
@@ -24,8 +24,8 @@ const validTypes = [
  * @returns
  *
  * @description
- * Cette fonction crée un modèle Pokemon dans la base de données.
- * Elle définit les colonnes de la table pokemon et les options de synchronisation.
+ * This function creates a Pokemon model in the database.
+ * It defines the columns of the pokemon table and the synchronization options.
  *
  * @example
  * const Pokemon = sequelize.define("user", {
@@ -66,15 +66,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: {
           args: true,
-          msg: "Le nom doit être unique",
+          msg: "the name must be unique",
         },
         validate: {
           max: {
             args: [10],
-            msg: "La taille du nom ne doit faire que 10 caractères",
+            msg: "The name size must be 10 characters long",
           },
-          notEmpty: { msg: "le nom ne peut pas être vide" },
-          notNull: { msg: "le nom est obligatoire" },
+          notEmpty: { msg: "The name cannot be empty" },
+          notNull: { msg: "The name is required" },
         },
       },
       hp: {
@@ -83,14 +83,14 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           max: {
             args: [999],
-            msg: "Les poinst de vie doivent être à l'intervalle de 0 à 999",
+            msg: "The health points must be in the interval of 0 to 999",
           },
           min: {
             args: [0],
-            msg: "Les poinst HP doivent être à l'intervalle de 0 à 999",
+            msg: "The HP points must be in the interval of 0 to 999",
           },
-          isInt: { msg: "Les points doivent être des entiers" },
-          notNull: { msg: "les points de vie sont obligatoire" },
+          isInt: { msg: "The points must be integers" },
+          notNull: { msg: "The health points are required" },
         },
       },
       cp: {
@@ -99,29 +99,29 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           max: {
             args: [99],
-            msg: "Les poinst de dégâts doivent être à l'intervalle de 0 à 99",
+            msg: "The damage points must be in the interval of 0 to 99",
           },
           min: {
             args: [0],
-            msg: "Les poinst CP doivent être à l'intervalle de 0 à 99",
+            msg: "The CP points must be in the interval of 0 to 99",
           },
-          isInt: { msg: "Les points doivent être des entiers" },
-          notNull: { msg: "les points de combat sont obligatoire" },
+          isInt: { msg: "The points must be integers" },
+          notNull: { msg: "The combat points are required" },
         },
       },
       picture: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          isUrl: { msg: "L'URL de l'image est invalide" },
-          notNull: { msg: "l'image est obligatoire" },
+          isUrl: { msg: "The image URL is invalid" },
+          notNull: { msg: "The image is required" },
         },
       },
       types: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          notEmpty: { msg: "le type est obligatoire" },
+          notEmpty: { msg: "The type is required" },
         },
         get() {
           return this.getDataValue("types")?.split(",") || [];
@@ -135,21 +135,21 @@ module.exports = (sequelize, DataTypes) => {
 
         isTypesValid(value) {
           if (!value) {
-            throw new Error("Un pokémon doit avoir un type !");
+            throw new Error("A pokemon must have a type !");
           }
           if (value.split(",").length > 3) {
-            throw new Error("Un pokémon ne peut avoir que 3 types maximum !");
+            throw new Error("A pokemon can have only 3 types maximum !");
           }
           value.split(",").forEach((element) => {
             if (!validTypes.includes(element)) {
-              throw new Error("Le type du pokémon est invalide !");
+              throw new Error("The type of the pokemon is invalid !");
             }
           });
         },
       },
     },
     {
-      timestamps: true, //ajoute les colonnes createdAt et updatedAt
+      timestamps: true, //Add created and updatedAt columns
       createdAt: "created",
       updatedAt: false,
     },

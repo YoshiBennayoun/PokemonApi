@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
   if (!authorizationHeader) {
     return res.status(401).json({
       message:
-        "Vous n'avez pas fourni de jeton d'authentification."
+        "You have not provided an authentication token."
     });
   }
 
@@ -17,7 +17,7 @@ module.exports = (req, res, next) => {
     if (error) {
       return res.status(401).json({
         message:
-          "L'utilisateur n'est pas autorisé à accéder à cette ressource.",
+          "The user is not authorized to access this resource.",
         error
       });
     }

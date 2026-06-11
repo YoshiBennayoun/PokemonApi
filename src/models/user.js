@@ -15,17 +15,17 @@ module.exports = (sequelise, DataTypes) => {
       type: DataTypes.STRING(50),
       allowNull: false,
       unique: {
-        msg: "le nom de l'utilisateur est déjà utilisé",
+        msg: "The username is already used",
       },
       validate: {
-        notEmpty: { msg: "le nom de l'utilisateur ne doit pas être vide" },
+        notEmpty: { msg: "The username cannot be empty" },
       },
     },
     password: {
       type: DataTypes.STRING(255),
       allowNull: false,
       validate: {
-        notEmpty: { msg: "le mot de passe est obligatoire" },
+        notEmpty: { msg: "The password is required" },
       },
     },
   });

@@ -7,7 +7,7 @@ module.exports = (app) => {
       if (!pokemon) {
         return res
           .status(404)
-          .json({ message: "Le pokémon demandé n'existe pas." });
+          .json({ message: "The pokemon you are looking for does not exist." });
       }
       const pokemonDeleted = pokemon;
       await Pokemon.destroy({
@@ -19,17 +19,17 @@ module.exports = (app) => {
           if (!pokemonDeleted) {
             return res
               .status(404)
-              .json({ message: "Le pokémon demandé n'existe pas." });
+              .json({ message: "The pokemon you are looking for does not exist." });
           }
           res.json({
-            message: `Le pokémon avec l'id  n°${pokemonDeleted.id} a bien été supprimé.`,
+            message: `The pokemon with id n°${pokemonDeleted.id} has been successfully deleted.`,
             data: pokemonDeleted,
           });
         })
         .catch((error) => {
           res.status(500).json({
             message:
-              "le pokmémon n'a pas pu être supprimé. Réessayez dans quelques instants.",
+              "The pokemon could not be deleted. Please try again in a few moments.",
             data: error,
           });
         });

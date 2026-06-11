@@ -16,7 +16,7 @@ app.use(morgan("dev"));
 app.use(express.static("public"));
 app.use(favicon(__dirname + "/public/favicon.svg"));
 
-// la base de données
+// Database initialization
 sequelize.initDb();
 
 require("./src/routes/findAllpokemons")(app);
@@ -31,7 +31,7 @@ require("./src/routes/login")(app);
 
 app.use(({ res }) => {
   const message =
-    "impossible de trouver la ressource demandé vous pouvez essayer une autre URL.";
+    "Unable to find the requested resource, you can try another URL.";
   res.status(404).json({ message });
 });
 
@@ -44,5 +44,5 @@ app.listen(port, () => {
 \x1b[0m
 
 \x1b[36m➜ Server running on port:\x1b[0m \x1b[33m${port}\x1b[0m
-\x1b[32m➜ Local:\x1b[0m \x1b[4mhttp://localhost:${port}\x1b[0m`);
+\x1b[32m➜ Local:\x1b[0m \x1b[4mhttp://localhost:${port}\x1b[0m\n`);
 });

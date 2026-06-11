@@ -8,7 +8,7 @@ module.exports = (app) => {
       .then((pokemonCreated) => {
         console.log(pokemonCreated.toJSON());
         res.json({
-          message: `pokemon ${pokemonCreated.name} créé avec success`,
+          message: `pokemon ${pokemonCreated.name} created successfully`,
           data: pokemonCreated,
         });
       })
@@ -20,7 +20,7 @@ module.exports = (app) => {
         } else {
           res
             .status(500)
-            .json({ message: "Le pokemon n'a pas pu être ajouter", data: err });
+            .json({ message: "The pokemon could not be added", data: err });
         }
       });
   });

@@ -10,7 +10,7 @@ module.exports = (app) => {
     if (name) {
       if (name.length < 2) {
         return res.status(400).json({
-          message: "Le terme de recherche doit contenir au moins 2 caractères",
+          message: "The search term must contain at least 2 characters",
         });
       }
       return Pokemon.findAndCountAll({
@@ -34,22 +34,22 @@ module.exports = (app) => {
         limit: limitParsed || 5,
         /**
          * @type {import("sequelize").FindOptions}
-         * @description ordre des résultats
+         * @description order of results
          */
         order: ["name"],
       }).then(({ count, rows }) => {
-        const message = `Il y a ${count} pokémon(s) qui correspondent au terme de recherche ${name}`;
+        const message = `There are ${count} pokémon(s) that match the search term ${name}`;
         res.json({ message, data: rows });
       });
     } else {
       Pokemon.findAll({ order: ["name"], limit: limitParsed || 5 })
         .then((pokemons) => {
-          const message = "La liste des pokémons a bien été récupérée.";
+          const message = "The list of pokémons has been successfully retrieved.";
           res.json({ message, data: pokemons });
         })
         .catch((error) => {
           const message =
-            "La liste des pokémons n a pas pu être récupérée. Réessayez dans quelques instants.";
+            "The list of pokémons could not be retrieved. Please try again in a few moments.";
           res.status(500).json({ message, data: error });
         });
     }

@@ -10,7 +10,6 @@ const dbuser = process.env.MYSQLUSER;
 const dbpassword = process.env.MYSQLPASSWORD;
 const dbhost = process.env.MYSQLHOST;
 
-
 const sequelize = new Sequelize(dbname, dbuser, dbpassword, {
   host: dbhost,
   dialect: "mariadb",
@@ -40,8 +39,8 @@ const User = UserModel(sequelize, DataTypes);
  * @returns {Promise<void>}
  */
 const initDb = async () => {
-  await sequelize.sync({force: true });
-  console.log("Init Db");
+  await sequelize.sync({ force: true });
+  console.log("Init Db, Database initialized!");
 
   pokemons.map((pokemon) => {
     Pokemon.create({
@@ -50,13 +49,12 @@ const initDb = async () => {
       cp: pokemon.cp,
       picture: pokemon.picture,
       types: pokemon.types,
-    }).then((pokemon) => console.log(pokemon.toJSON()));
-  }); 
-  console.log("Database initialized!");
+    })
+  });
   User.create({
     username: "orssi",
     password: await bcrypt.hash("admin", 12),
-  }).then((user) => console.log(user.toJSON()));
+  })
 };
 
 module.exports = {
