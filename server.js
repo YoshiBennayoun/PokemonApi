@@ -1,6 +1,7 @@
 require("dotenv/config");
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 const favicon = require("serve-favicon");
 const sequelize = require("./src/db/sequelize");
 
@@ -10,11 +11,12 @@ app.use((req, res, next) => {
   next();
 });
 const port = process.env.PORT || 3000;
-
-app.use(express.json());
-app.use(morgan("dev"));
-app.use(express.static("public"));
-app.use(favicon(__dirname + "/public/favicon.svg"));
+app
+  .use(cors())
+  .use(express.json())
+  .use(morgan("dev"))
+  .use(express.static("public"))
+  .use(favicon(__dirname + "/public/favicon.svg"));
 
 // la base de données
 sequelize.initDb();
@@ -24,6 +26,7 @@ require("./src/routes/findPokemonByPk")(app);
 require("./src/routes/createPokemon")(app);
 require("./src/routes/updatePokemon")(app);
 require("./src/routes/deletePokemon")(app);
+require("./src/routes/register")(app);
 require("./src/routes/login")(app);
 
 // gestion des erreurs 404
@@ -31,7 +34,7 @@ require("./src/routes/login")(app);
 app.use(({ res }) => {
   const message =
     "impossible de trouver la ressource demandé vous pouvez essayer une autre URL.";
-    res.status(404).json({message})
+  res.status(404).json({ message });
 });
 
 app.listen(port, () => {
