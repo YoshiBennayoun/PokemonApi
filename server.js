@@ -1,5 +1,4 @@
 require("dotenv/config");
-const favicon = require("serve-favicon");
 const express = require("express");
 const sequelize = require("./src/db/sequelize");
 const cors = require("cors");
