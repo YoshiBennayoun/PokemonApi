@@ -8,12 +8,12 @@
     "dev": "nodemon server.js"
   },
   "keywords": [],
-  "author": "Orssi Mp",
+  "author": "Yoshi Bennayoun",
   "license": "ISC",
   "devEngines": {
     "packageManager": {
       "name": "npm",
-      "version": "^11.11.0",
+      "version": ">=10.9.8",
       "onFail": "download"
     }
   },
