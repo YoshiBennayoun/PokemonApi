@@ -7,52 +7,52 @@ importers:
     configDependencies: {}
     packageManagerDependencies:
       '@pnpm/exe':
-        specifier: ^11.0.8
-        version: 11.0.9
+        specifier: 11.5.2
+        version: 11.5.2
       pnpm:
-        specifier: ^11.0.8
-        version: 11.0.9
+        specifier: 11.5.2
+        version: 11.5.2
 
 packages:
 
-  '@pnpm/exe@11.0.9':
-    resolution: {integrity: sha512-d5sY2jBLVWCC+MrPCgqbDHacmkPwqIjpoBKfczbjzaaNSBN62P6k1SS6R3t4xXlJ2k83HVk9/xgk2OuPJRXpUw==}
+  '@pnpm/exe@11.5.2':
+    resolution: {integrity: sha512-4UFnP2rhNu1xjAQ+I1GdIUUEtCJuTYJlbpiWSFA4POAID3Lpt+2vrjImWO7eOJ7iCY3vpc4TFe2IW3sAolW4Kg==}
     hasBin: true
 
-  '@pnpm/linux-arm64@11.0.9':
-    resolution: {integrity: sha512-Kh2gPz1EffY44XFyJsWjWnzzCGn8C5K4tF242JOhlHyxN/O8qKw0nQ8jqkIhP9W9Rinl3W0Yk5cIeVGweq+bCQ==}
+  '@pnpm/linux-arm64@11.5.2':
+    resolution: {integrity: sha512-MbJySnu2y9cCBqlODLjUlZ87JnRC3Inq40rvGHWJSrSQ0PnuHeSw2NDMnLI8Hf9hCY+ooussRc5iiR4IAkjUvg==}
     cpu: [arm64]
     os: [linux]
 
-  '@pnpm/linux-x64@11.0.9':
-    resolution: {integrity: sha512-jM9UFB9RpV56O30X0F+nyDDX76VBAwfo1LPpTrGFTEh4kVakPi9ypH6NXZG5yBugjOmG7vlQEl3n4EaPzKYuxA==}
+  '@pnpm/linux-x64@11.5.2':
+    resolution: {integrity: sha512-g6g2BGpQA47wUACy6B1MdeSHPtnl6x4AeCg0IOWQ7xXorEtC+VRiSHhLpA5kByFGeSwyYh/nLc7mLul5DAaELw==}
     cpu: [x64]
     os: [linux]
 
-  '@pnpm/linuxstatic-arm64@11.0.9':
-    resolution: {integrity: sha512-vPP+OnxrZAvhOIdYhK+t99QwbXBnq9WH71Yl3IXPoU398s1zWWDBRNU3YiOBgzLCLaRLFdSxGzzzu9W4xja8CQ==}
+  '@pnpm/linuxstatic-arm64@11.5.2':
+    resolution: {integrity: sha512-xTxs9BLxYW39BPNGnmvYCUBnMPWm4mzmzujmdYbpRxDnBXrx55qPR5K/3LSohX7VrmsdDrYxuH6AmG1AaOlIfA==}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@pnpm/linuxstatic-x64@11.0.9':
-    resolution: {integrity: sha512-zIv1jal59mOU0vd0X2D8AIuKTE1Qng5Aului7zYADjscokSEjnYlJMwjgEOZlaIm4Mj+nX/inUosvVqVTNMoIA==}
+  '@pnpm/linuxstatic-x64@11.5.2':
+    resolution: {integrity: sha512-RGmmc/SoGLD90gmOHcU85UEKNoNRstLvizli4wzDASmETz/VeqJOqU5nD1YBgjzcP72sUMS352dh4bmzTfKyvQ==}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@pnpm/macos-arm64@11.0.9':
-    resolution: {integrity: sha512-kIZcdmwwtfrydWNFOvTV2lr8PKCO7lLwunGm2ApsxJt+r92PxTg22hBS3+bOK/9QaAQRQWmgncjq3a/fqKVt3A==}
+  '@pnpm/macos-arm64@11.5.2':
+    resolution: {integrity: sha512-gW3A2jRlC3SJRw8qX2SAzjMIu9o98daTSqCKzeeYcjF/uEbtbz3dn4HqYrYffBnenKbc4hsgZQmNOHAvUKIlSg==}
     cpu: [arm64]
     os: [darwin]
 
-  '@pnpm/win-arm64@11.0.9':
-    resolution: {integrity: sha512-9yfujTV0CYQl5lsbVCm78mNqrx1wsEK3NhFaX0mC3QQirAuoGOnR2us0OpZZ5lwprmUWVNvKh9Qsi0p1iA3LMg==}
+  '@pnpm/win-arm64@11.5.2':
+    resolution: {integrity: sha512-+VJCDoH/pRzLXBikwjvxgAnGfQufT8EALBX8cfSmrwD40JABUZvgPtjBjde7OwEoK/XwtlH8w+ZceFV0K3/YHQ==}
     cpu: [arm64]
     os: [win32]
 
-  '@pnpm/win-x64@11.0.9':
-    resolution: {integrity: sha512-HMdWkllT0sjsvXw9EDRBA4p2vz06iEUhlD0Q+/66stevlffj9F8X9sAONsjz4AvoDhn8YTnsE+9oEOBJxgFZmg==}
+  '@pnpm/win-x64@11.5.2':
+    resolution: {integrity: sha512-zgglREh75RbFgV/E0tNRS03ElX+hJOV43KRSSeaboxtj3ei1rrguxOgOCXUs/GsizoHVsuD+qXGABE4Kc4GMCg==}
     cpu: [x64]
     os: [win32]
 
@@ -116,45 +116,45 @@ packages:
     resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
     engines: {node: '>=8'}
 
-  pnpm@11.0.9:
-    resolution: {integrity: sha512-NM6C5ngCM8+crYaFApqPgdLgYZbFqbrZiHn3QklAxoF8TkUk+304uFU87tSLl1i4668avTYAwjLEyM9zZghvOA==}
+  pnpm@11.5.2:
+    resolution: {integrity: sha512-ccYx44IGbvwlYl1c8CkHXeB7YbN/bic1D72Esb2lhkyMGWetwoB3a0XDCnFcA1mjvgj+9C1bsJ4rmQKZeWkpFg==}
     engines: {node: '>=22.13'}
     hasBin: true
 
 snapshots:
 
-  '@pnpm/exe@11.0.9':
+  '@pnpm/exe@11.5.2':
     dependencies:
       '@reflink/reflink': 0.1.19
       detect-libc: 2.1.2
     optionalDependencies:
-      '@pnpm/linux-arm64': 11.0.9
-      '@pnpm/linux-x64': 11.0.9
-      '@pnpm/linuxstatic-arm64': 11.0.9
-      '@pnpm/linuxstatic-x64': 11.0.9
-      '@pnpm/macos-arm64': 11.0.9
-      '@pnpm/win-arm64': 11.0.9
-      '@pnpm/win-x64': 11.0.9
+      '@pnpm/linux-arm64': 11.5.2
+      '@pnpm/linux-x64': 11.5.2
+      '@pnpm/linuxstatic-arm64': 11.5.2
+      '@pnpm/linuxstatic-x64': 11.5.2
+      '@pnpm/macos-arm64': 11.5.2
+      '@pnpm/win-arm64': 11.5.2
+      '@pnpm/win-x64': 11.5.2
 
-  '@pnpm/linux-arm64@11.0.9':
+  '@pnpm/linux-arm64@11.5.2':
     optional: true
 
-  '@pnpm/linux-x64@11.0.9':
+  '@pnpm/linux-x64@11.5.2':
     optional: true
 
-  '@pnpm/linuxstatic-arm64@11.0.9':
+  '@pnpm/linuxstatic-arm64@11.5.2':
     optional: true
 
-  '@pnpm/linuxstatic-x64@11.0.9':
+  '@pnpm/linuxstatic-x64@11.5.2':
     optional: true
 
-  '@pnpm/macos-arm64@11.0.9':
+  '@pnpm/macos-arm64@11.5.2':
     optional: true
 
-  '@pnpm/win-arm64@11.0.9':
+  '@pnpm/win-arm64@11.5.2':
     optional: true
 
-  '@pnpm/win-x64@11.0.9':
+  '@pnpm/win-x64@11.5.2':
     optional: true
 
   '@reflink/reflink-darwin-arm64@0.1.19':
@@ -194,7 +194,7 @@ snapshots:
 
   detect-libc@2.1.2: {}
 
-  pnpm@11.0.9: {}
+  pnpm@11.5.2: {}
 
 ---
 lockfileVersion: '9.0'
@@ -218,7 +218,7 @@ importers:
         version: 17.4.2
       express:
         specifier: ^5.2.1
-        version: 5.2.1
+        version: 5.2.1(supports-color@5.5.0)
       jsonwebtoken:
         specifier: ^9.0.3
         version: 9.0.3
@@ -227,7 +227,7 @@ importers:
         version: 3.5.2
       sequelize:
         specifier: ^6.37.8
-        version: 6.37.8(mariadb@3.5.2)
+        version: 6.37.8(mariadb@3.5.2)(supports-color@5.5.0)
       serve-favicon:
         specifier: ^2.5.1
         version: 2.5.1
@@ -848,7 +848,7 @@ snapshots:
 
   binary-extensions@2.3.0: {}
 
-  body-parser@2.2.2:
+  body-parser@2.2.2(supports-color@5.5.0):
     dependencies:
       bytes: 3.1.2
       content-type: 1.0.5
@@ -953,10 +953,10 @@ snapshots:
 
   etag@1.8.1: {}
 
-  express@5.2.1:
+  express@5.2.1(supports-color@5.5.0):
     dependencies:
       accepts: 2.0.0
-      body-parser: 2.2.2
+      body-parser: 2.2.2(supports-color@5.5.0)
       content-disposition: 1.1.0
       content-type: 1.0.5
       cookie: 0.7.2
@@ -966,7 +966,7 @@ snapshots:
       encodeurl: 2.0.0
       escape-html: 1.0.3
       etag: 1.8.1
-      finalhandler: 2.1.1
+      finalhandler: 2.1.1(supports-color@5.5.0)
       fresh: 2.0.0
       http-errors: 2.0.1
       merge-descriptors: 2.0.0
@@ -977,8 +977,8 @@ snapshots:
       proxy-addr: 2.0.7
       qs: 6.15.1
       range-parser: 1.2.1
-      router: 2.2.0
-      send: 1.2.1
+      router: 2.2.0(supports-color@5.5.0)
+      send: 1.2.1(supports-color@5.5.0)
       serve-static: 2.2.1
       statuses: 2.0.2
       type-is: 2.0.1
@@ -990,7 +990,7 @@ snapshots:
     dependencies:
       to-regex-range: 5.0.1
 
-  finalhandler@2.1.1:
+  finalhandler@2.1.1(supports-color@5.5.0):
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
       encodeurl: 2.0.0
@@ -1237,7 +1237,7 @@ snapshots:
 
   retry-as-promised@7.1.1: {}
 
-  router@2.2.0:
+  router@2.2.0(supports-color@5.5.0):
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
       depd: 2.0.0
@@ -1255,7 +1255,7 @@ snapshots:
 
   semver@7.8.0: {}
 
-  send@1.2.1:
+  send@1.2.1(supports-color@5.5.0):
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
       encodeurl: 2.0.0
@@ -1273,7 +1273,7 @@ snapshots:
 
   sequelize-pool@7.1.0: {}
 
-  sequelize@6.37.8(mariadb@3.5.2):
+  sequelize@6.37.8(mariadb@3.5.2)(supports-color@5.5.0):
     dependencies:
       '@types/debug': 4.1.13
       '@types/validator': 13.15.10
@@ -1309,7 +1309,7 @@ snapshots:
       encodeurl: 2.0.0
       escape-html: 1.0.3
       parseurl: 1.3.3
-      send: 1.2.1
+      send: 1.2.1(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
 
