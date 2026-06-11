@@ -1,13 +1,19 @@
 {
   "name": "pokemonapi",
   "version": "1.0.0",
-  "description": "a mock-pokedex",
-  "main": "index.js",
+  "description": "a mock-pokedex api",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  "keywords": [],
+  "keywords": [
+    "pokemon",
+    "pokedex",
+    "api",
+    "express",
+    "nodejs"
+  ],
   "author": "Yoshi Bennayoun",
   "license": "ISC",
   "devEngines": {
