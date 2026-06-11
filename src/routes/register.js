@@ -1,7 +1,11 @@
 const { User } = require("../db/sequelize");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const auth = require("../auth/auth");
+const private_key = process.env.JWT_SECRET;
+
 module.exports = (app) => {
-  app.post("/api/register", async (req, res) => {
+  app.post("/api/register", auth, async (req, res) => {
     const { username, password } = req.body;
     const passwordHashed = await bcrypt.hash(password, 12);
     // TODO: Implement registration logic
@@ -12,7 +16,9 @@ module.exports = (app) => {
           user: {
             id: user.id,
             username: user.username,
-            password: user.password
+            token: jwt.sign({ userId: user.id }, private_key, {
+              expiresIn: "24h",
+            }),
           },
         });
       })

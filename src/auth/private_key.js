@@ -1,1 +1,0 @@
-module.exports = "CUSTOME_PRIVATE_KEY";
