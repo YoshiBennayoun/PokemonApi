@@ -12,8 +12,8 @@
   "license": "ISC",
   "devEngines": {
     "packageManager": {
-      "name": "pnpm",
-      "version": "^11.0.8",
+      "name": "npm",
+      "version": "^11.11.0",
       "onFail": "download"
     }
   },
@@ -25,11 +25,10 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "mariadb": "^3.5.2",
-    "sequelize": "^6.37.8",
-    "serve-favicon": "^2.5.1"
+    "sequelize": "^6.37.8"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14",
-    "morgan": "^1.10.1"
+    "morgan": "^1.10.1",
+    "nodemon": "^3.1.14"
   }
 }

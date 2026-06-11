@@ -2,8 +2,6 @@ dev/
 learn/
 
 .env
-pnpm-lock.yaml
-pnpm-workspace.yaml
 
 # Logs
 logs
